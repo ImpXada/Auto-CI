@@ -53,7 +53,7 @@ jobs:
         cd ${{ github.workspace }}/suyu/src/android
         chmod +x ./gradlew
         ./gradlew "assembleMainlineRelease"
-        mv app/build/outputs/apk/mainline/release/app-mainline-release.apk ${{ github.workspace }}/suyu-${{ steps.version.outputs.date }}-${{ steps.version.outputs.short_hash }}.apk
+        mv app/build/outputs/apk/mainline/release/app-mainline-release.apk ${{ github.workspace }}/suyu_${{ steps.version.outputs.date }}.apk
         ccache -s
 
     - name: Release ${{ steps.version.outputs.date }}
@@ -62,4 +62,4 @@ jobs:
         name: ${{ steps.version.outputs.date }}
         tag_name: ${{ steps.version.outputs.date }}
         body: https://gitlab.com/suyu-emu/suyu/-/issues
-        files: ${{ github.workspace }}/suyu-${{ steps.version.outputs.date }}-${{ steps.version.outputs.short_hash }}.apk
+        files: ${{ github.workspace }}/${{ github.workspace }}/suyu_${{ steps.version.outputs.date }}.apk
