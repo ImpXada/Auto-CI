@@ -56,7 +56,7 @@ jobs:
         mv app/build/outputs/apk/mainline/release/app-mainline-release.apk ${{ github.workspace }}/suyu-${{ steps.version.outputs.date }}-${{ steps.version.outputs.short_hash }}.apk
         ccache -s
 
-    - name: Release
+    - name: Release ${{ steps.version.outputs.date }}
       uses: softprops/action-gh-release@v2
       with:
         name: ${{ steps.version.outputs.date }}
