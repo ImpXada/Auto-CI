@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v3
-      with: { ref: alpha }
+      with: { ref: master }
 
     - name: Prepare environment
       run: |
@@ -33,8 +33,8 @@ jobs:
       with:
         name: Upload meson and ninja logs for debugging
         path: |
-          turnip_workdir/ninja_log
-          turnip_workdir/mesa-main/build-android-aarch64/meson-logs/meson-log.txt
+          ${{ github.workspace }}/ninja_log
+          ${{ github.workspace }}/mesa-main/build-android-aarch64/meson-logs/meson-log.txt
 
     - name: Release ${{ steps.set_date.outputs.current_date }}
       uses: softprops/action-gh-release@v1
@@ -43,4 +43,4 @@ jobs:
         tag_name: github_run
         name: ${{ steps.set_date.outputs.current_date }}
         files: |
-           turnip_workdir/turnip_${{ steps.set_date.outputs.current_date }}.zip
+           ${{ github.workspace }}/turnip_${{ steps.set_date.outputs.current_date }}.zip
