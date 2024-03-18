@@ -1,4 +1,4 @@
-name: Release "turnip"
+name: turnip-android-build
 
 on:
   workflow_dispatch:
@@ -26,15 +26,19 @@ jobs:
     - name: Execute build script
       run: bash ./turnip_builder.sh
       
-    - name: Set current date
-      id: set_date
-      run: echo "::set-output name=current_date::$(date '+%Y%m%d')"
+    - id: version
+      name: Get version
+      run: |
+        echo "date=$(/bin/date -u "+%Y%m%d")" >> $GITHUB_OUTPUT
+        cd ${{ github.workspace }}/suyu
+        echo "hash=$(git log -1 --pretty=format:%H)" >> $GITHUB_OUTPUT
+        echo "short_hash=$(git describe --always --long)" >> $GITHUB_OUTPUT
 
-    - name: Release ${{ steps.set_date.outputs.current_date }}
+    - name: Release ${{ steps.version.outputs.date }}
       uses: softprops/action-gh-release@v1
       with:
+        name: ${{ steps.version.outputs.date }}
+        tag_name: ${{ steps.version.outputs.date }}
         body: Turnip Android module
-        tag_name: github_run
-        name: ${{ steps.set_date.outputs.current_date }}
         files: |
-           turnip_workdir/turnip_${{ steps.set_date.outputs.current_date }}.zip
+           turnip_workdir/turnip_${{ steps.version.outputs.date }}.zip

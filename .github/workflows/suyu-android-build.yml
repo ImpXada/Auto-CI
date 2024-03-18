@@ -60,6 +60,6 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
         name: ${{ steps.version.outputs.date }}
-        body: 非suyu官方每日构建版本，dev分支构建，不提供任何更新说明，遇到任何问题请前往https://gitlab.com/suyu-emu/suyu/-/issues
         tag_name: ${{ steps.version.outputs.date }}
+        body: https://gitlab.com/suyu-emu/suyu/-/issues
         files: ${{ github.workspace }}/suyu-${{ steps.version.outputs.date }}-${{ steps.version.outputs.short_hash }}.apk
