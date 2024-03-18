@@ -1,17 +1,21 @@
-name: suyu-android-build
+name: strato-android-build
 
 on:
   workflow_dispatch:
     inputs:
       branch:
-        description: 'select branch to build(default: dev)'
+        description: 'select branch to build(default: master)'
         required: false
-        default: 'dev'
-  schedule:
-    - cron: "30 0 * * *"
+        default: 'master'
+      flavor:
+        description: 'select flavor to build(default: mainline)'
+        required: false
+        default: 'mainline'
+#   schedule:
+#     - cron: "30 0 */2 * *"
 
 jobs:
-  suyu_android_build:
+  strato_android_build:
     permissions:
       contents: write
     runs-on: ubuntu-latest
@@ -21,16 +25,16 @@ jobs:
         distribution: temurin
         java-version: 17
 
-    - name: Download suyu source code
+    - name: Download strato source code
       run: |
         cd ${{ github.workspace }}
-        git clone --branch ${{ github.event.inputs.branch || 'dev' }} https://git.suyu.dev/suyu/suyu.git --recursive
+        git clone --branch ${{ github.event.inputs.branch || 'master' }} https://github.com/strato-emu/strato.git --recursive
 
     - id: version
       name: Get version
       run: |
         echo "date=$(/bin/date -u "+%Y%m%d")" >> $GITHUB_OUTPUT
-        cd ${{ github.workspace }}/suyu
+        cd ${{ github.workspace }}/strato
         echo "hash=$(git log -1 --pretty=format:%H)" >> $GITHUB_OUTPUT
         echo "short_hash=$(git describe --always --long)" >> $GITHUB_OUTPUT
         echo "version=$(git describe --tags --always)" >> $GITHUB_OUTPUT
@@ -49,20 +53,22 @@ jobs:
     - name: Prepare environment
       run: |
         sudo apt-get install ccache glslang-dev glslang-tools
+        sudo apt-get install -y ninja-build
+        ln -s /usr/bin/ninja .
 
     - name: Build Android
       run: |
         export NDK_CCACHE="$(which ccache)"
         ccache -s
-        cd ${{ github.workspace }}/suyu/src/android
+        cd ${{ github.workspace }}/strato
         chmod +x ./gradlew
-        ./gradlew "assembleMainlineRelease"
-        mv app/build/outputs/apk/mainline/release/app-mainline-release.apk ${{ github.workspace }}/suyu-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
+        ./gradlew --no-daemon --stacktrace --build-cache --parallel --configure-on-demand assembleMainlineRelease
+        mv $(find app/build/outputs/apk -type f | grep -E "\.apk$") ${{ github.workspace }}/strato-${{ github.event.inputs.flavor || 'ea' }}-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
         ccache -s
 
-    - name: Release Suyu
+    - name: Release Strato
       uses: softprops/action-gh-release@v2
       with:
         name: ${{ steps.version.outputs.date }}
         tag_name: ${{ steps.version.outputs.date }}
-        files: ${{ github.workspace }}/suyu-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
+        files: ${{ github.workspace }}/strato-${{ github.event.inputs.flavor || 'ea' }}-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk

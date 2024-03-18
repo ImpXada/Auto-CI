@@ -1,0 +1,47 @@
+name: turnip-android-build
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'select branch to build(default: main)'
+        required: false
+        default: 'main'
+  schedule:
+    - cron: '0 */12 * * *'
+
+jobs:
+  start_building_turnip:
+    permissions:
+      contents: write
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v4
+      with: { ref: main }
+
+    - name: Prepare environment
+      run: |
+        sudo sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
+        sudo apt update
+        sudo apt build-dep mesa -y
+        sudo sed -i 's/jammy/mantic/g' /etc/apt/sources.list
+        sudo apt update
+        sudo apt install meson
+    
+    - name: Execute build script
+      run: bash ./script/turnip_builder.sh ${{ github.event.inputs.branch || 'main'}}
+      
+    - id: version
+      name: Get date
+      run: |
+          cd ${{ github.workspace }}/turnip_workdir/mesa
+          echo "date=$(date -u "+%Y%m%d")" >> $GITHUB_OUTPUT
+          echo "tag=$(git describe --tags --always)" >> $GITHUB_OUTPUT
+
+    - name: Release Turnip
+      uses: softprops/action-gh-release@v2
+      with:
+        name: ${{ steps.version.outputs.date }}
+        tag_name: ${{ steps.version.outputs.date }}
+        files: |
+           ${{ github.workspace }}/turnip_workdir/turnip-${{ steps.version.outputs.date }}-${{ steps.version.outputs.tag }}.zip

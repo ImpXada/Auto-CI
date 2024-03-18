@@ -1,17 +1,21 @@
-name: suyu-android-build
+name: sudachi-android-build
 
 on:
   workflow_dispatch:
     inputs:
       branch:
-        description: 'select branch to build(default: dev)'
+        description: 'select branch to build(default: main)'
         required: false
-        default: 'dev'
+        default: 'main'
+      flavor:
+        description: 'select flavor to build(default: ea)'
+        required: false
+        default: 'ea'
   schedule:
-    - cron: "30 0 * * *"
+    - cron: "30 0 */2 * *"
 
 jobs:
-  suyu_android_build:
+  sudachi_android_build:
     permissions:
       contents: write
     runs-on: ubuntu-latest
@@ -21,16 +25,16 @@ jobs:
         distribution: temurin
         java-version: 17
 
-    - name: Download suyu source code
+    - name: Download sudachi source code
       run: |
         cd ${{ github.workspace }}
-        git clone --branch ${{ github.event.inputs.branch || 'dev' }} https://git.suyu.dev/suyu/suyu.git --recursive
+        git clone --branch ${{ github.event.inputs.branch || 'main' }} https://github.com/sudachi-emu/sudachi.git --recursive
 
     - id: version
       name: Get version
       run: |
         echo "date=$(/bin/date -u "+%Y%m%d")" >> $GITHUB_OUTPUT
-        cd ${{ github.workspace }}/suyu
+        cd ${{ github.workspace }}/sudachi
         echo "hash=$(git log -1 --pretty=format:%H)" >> $GITHUB_OUTPUT
         echo "short_hash=$(git describe --always --long)" >> $GITHUB_OUTPUT
         echo "version=$(git describe --tags --always)" >> $GITHUB_OUTPUT
@@ -54,15 +58,15 @@ jobs:
       run: |
         export NDK_CCACHE="$(which ccache)"
         ccache -s
-        cd ${{ github.workspace }}/suyu/src/android
+        cd ${{ github.workspace }}/sudachi/src/android
         chmod +x ./gradlew
         ./gradlew "assembleMainlineRelease"
-        mv app/build/outputs/apk/mainline/release/app-mainline-release.apk ${{ github.workspace }}/suyu-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
+        mv $(find app/build/outputs/apk -type f | grep -E "\.apk$") ${{ github.workspace }}/sudachi-${{ github.event.inputs.flavor || 'ea' }}-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
         ccache -s
 
-    - name: Release Suyu
+    - name: Release Sudachi
       uses: softprops/action-gh-release@v2
       with:
         name: ${{ steps.version.outputs.date }}
         tag_name: ${{ steps.version.outputs.date }}
-        files: ${{ github.workspace }}/suyu-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
+        files: ${{ github.workspace }}/sudachi-${{ github.event.inputs.flavor || 'ea' }}-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
