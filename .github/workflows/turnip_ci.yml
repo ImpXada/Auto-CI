@@ -35,4 +35,4 @@ jobs:
         tag_name: github_run
         name: ${{ steps.set_date.outputs.current_date }}
         files: |
-           ${{ github.workspace }}/turnip_module/turnip_${{ steps.set_date.outputs.current_date }}.zip
+           turnip_${{ steps.set_date.outputs.current_date }}.zip
