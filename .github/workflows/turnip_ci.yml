@@ -28,14 +28,6 @@ jobs:
       id: set_date
       run: echo "::set-output name=current_date::$(date '+%Y%m%d')"
 
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3.1.0
-      with:
-        name: Upload meson and ninja logs for debugging
-        path: |
-          ${{ github.workspace }}/ninja_log
-          ${{ github.workspace }}/mesa-main/build-android-aarch64/meson-logs/meson-log.txt
-
     - name: Release ${{ steps.set_date.outputs.current_date }}
       uses: softprops/action-gh-release@v1
       with:
@@ -43,4 +35,4 @@ jobs:
         tag_name: github_run
         name: ${{ steps.set_date.outputs.current_date }}
         files: |
-           ${{ github.workspace }}/turnip_${{ steps.set_date.outputs.current_date }}.zip
+           ${{ github.workspace }}/turnip_module/turnip_${{ steps.set_date.outputs.current_date }}.zip
