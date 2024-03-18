@@ -1,0 +1,65 @@
+name: suyu-android-build
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  suyu_android_build:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: 17
+
+    - name: Download suyu source code
+      run: |
+        cd ${{ github.workspace }}
+        git clone https://gitlab.com/suyu-emu/suyu.git --recursive
+        cd suyu
+        git checkout dev
+
+    - id: version
+      name: Get version
+      run: |
+        echo "date=$(/bin/date -u "+%Y%m%d")" >> $GITHUB_OUTPUT
+        cd ${{ github.workspace }}/suyu
+        echo "hash=$(git log -1 --pretty=format:%H)" >> $GITHUB_OUTPUT
+        echo "short_hash=$(git describe --always --long)" >> $GITHUB_OUTPUT
+
+    - name: Set up cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+          ~/.ccache
+        key: ${{ runner.os }}-android-${{ steps.version.outputs.hash }}
+        restore-keys: |
+            ${{ runner.os }}-android-
+
+    - name: Prepare environment
+      run: |
+        sudo apt-get install ccache glslang-dev glslang-tools
+
+    - name: Build Android
+      run: |
+        export NDK_CCACHE="$(which ccache)"
+        ccache -s
+        cd ${{ github.workspace }}/suyu/src/android
+        chmod +x ./gradlew
+        ./gradlew "assembleMainlineRelease"
+        mv app/build/outputs/apk/mainline/release/app-mainline-release.apk ${{ github.workspace }}/suyu-${{ steps.version.outputs.date }}-${{ steps.version.outputs.short_hash }}.apk
+        ccache -s
+
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      with:
+        name: ${{ steps.version.outputs.date }}
+        body: 非suyu官方每日构建版本，dev分支构建，不提供任何更新说明，遇到任何问题请前往https://gitlab.com/suyu-emu/suyu/-/issues
+        tag_name: ${{ steps.version.outputs.date }}
+        files: ${{ github.workspace }}/suyu-${{ steps.version.outputs.date }}-${{ steps.version.outputs.short_hash }}.apk

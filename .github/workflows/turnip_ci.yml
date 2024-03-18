@@ -1,0 +1,46 @@
+name: Release "turnip"
+
+on:
+  workflow_dispatch:
+  schedule:
+  - cron: '0 0 * * *'
+
+jobs:
+  start_building_turnip:
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v3
+      with: { ref: alpha }
+
+    - name: Prepare environment
+      run: |
+        sudo sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
+        sudo apt update
+        sudo apt build-dep mesa -y
+        sudo sed -i 's/jammy/mantic/g' /etc/apt/sources.list
+        sudo apt update
+        sudo apt install meson
+    
+    - name: Execute build script
+      run: bash ./turnip_builder.sh
+      
+    - name: Set current date
+      id: set_date
+      run: echo "::set-output name=current_date::$(date '+%Y%m%d')"
+
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.0
+      with:
+        name: Upload meson and ninja logs for debugging
+        path: |
+          turnip_workdir/ninja_log
+          turnip_workdir/mesa-main/build-android-aarch64/meson-logs/meson-log.txt
+
+    - name: Release ${{ steps.set_date.outputs.current_date }}
+      uses: softprops/action-gh-release@v1
+      with:
+        body: Turnip Android module
+        tag_name: github_run
+        name: ${{ steps.set_date.outputs.current_date }}
+        files: |
+           turnip_workdir/turnip_${{ steps.set_date.outputs.current_date }}.zip
