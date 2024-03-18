@@ -30,7 +30,7 @@ jobs:
       name: Get version
       run: |
         echo "date=$(/bin/date -u "+%Y%m%d")" >> $GITHUB_OUTPUT
-        cd ${{ github.workspace }}/suyu
+        cd ${{ github.workspace }}/mesa-main
         echo "hash=$(git log -1 --pretty=format:%H)" >> $GITHUB_OUTPUT
         echo "short_hash=$(git describe --always --long)" >> $GITHUB_OUTPUT
 
