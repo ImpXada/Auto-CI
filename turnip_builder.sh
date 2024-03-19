@@ -106,6 +106,7 @@ echo "Prepare magisk module structure ..." $'\n'
 mkdir -p $driverdir
 cd $driverdir
 
+current_date=$(date "+%Y%m%d")
 
 cat <<EOF >"meta.json"
 {
@@ -115,7 +116,7 @@ cat <<EOF >"meta.json"
   "author": "ImpXada",
   "packageVersion": "T-Alpha",
   "vendor": "Mesa",
-  "driverVersion": "mesa-main",
+  "driverVersion": "$current_date",
   "minApi": 31,
   "libraryName": "vulkan.adreno.so"
 }
@@ -129,7 +130,6 @@ cp $workdir/libsync.so $driverdir
 cp $workdir/libbacktrace.so $driverdir
 
 
-current_date=$(date "+%Y%m%d")
 echo "Packing files in to magisk module ..." $'\n'
 zip -r $workdir/turnip_$current_date.zip * &> /dev/null
 if ! [ -a $workdir/turnip_$current_date.zip ];
