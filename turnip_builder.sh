@@ -45,12 +45,14 @@ unzip "$ndkver"-linux.zip  &> /dev/null
 
 
 
-echo "Downloading mesa source ..." $'\n'
-curl https://gitlab.freedesktop.org/mesa/mesa/-/archive/main/mesa-main.zip --output mesa-main.zip &> /dev/null
-echo "Exracting mesa source to a folder ..." $'\n'
-unzip mesa-main.zip &> /dev/null
+# echo "Downloading mesa source ..." $'\n'
+# curl https://gitlab.freedesktop.org/mesa/mesa/-/archive/main/mesa-main.zip --output mesa-main.zip &> /dev/null
+# echo "Exracting mesa source to a folder ..." $'\n'
+# unzip mesa-main.zip &> /dev/null
+# cd mesa-main
+git clone https://gitlab.freedesktop.org/mesa/mesa.git mesa-main
 cd mesa-main
-
+git checkout main
 
 
 echo "Creating meson cross file ..." $'\n'
