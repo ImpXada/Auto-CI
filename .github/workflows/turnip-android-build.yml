@@ -3,13 +3,15 @@ name: turnip-android-build
 on:
   workflow_dispatch:
   schedule:
-  - cron: '0 0 * * *'
+    - cron: '0 0 * * *'
 
 jobs:
   start_building_turnip:
-    permissions: 
+    permissions:
       contents: write
     runs-on: ubuntu-22.04
+    env:
+      BRANCH: main  # 添加一个名为 BRANCH 的环境变量，默认值为 main
     steps:
     - uses: actions/checkout@v3
       with: { ref: master }
@@ -24,12 +26,12 @@ jobs:
         sudo apt install meson
     
     - name: Execute build script
-      run: bash ./turnip_builder.sh
+      run: bash ./turnip_builder.sh $BRANCH
       
     - id: version
       name: Get version
       run: |
-        echo "date=$(/bin/date -u "+%Y%m%d")" >> $GITHUB_OUTPUT
+          echo "date=$(date -u "+%Y%m%d")" >> $GITHUB_OUTPUT
 
     - name: Release ${{ steps.version.outputs.date }}
       uses: softprops/action-gh-release@v1

@@ -52,7 +52,7 @@ unzip "$ndkver"-linux.zip  &> /dev/null
 # cd mesa-main
 git clone https://gitlab.freedesktop.org/mesa/mesa.git mesa-main
 cd mesa-main
-git checkout main
+git checkout $1
 
 
 echo "Creating meson cross file ..." $'\n'
