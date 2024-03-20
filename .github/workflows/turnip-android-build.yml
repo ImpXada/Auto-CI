@@ -8,7 +8,7 @@ on:
         required: false
         default: 'main'
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 */8 * * *'
 
 jobs:
   start_building_turnip:
