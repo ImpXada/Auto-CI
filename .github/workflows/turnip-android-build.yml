@@ -32,7 +32,7 @@ jobs:
       run: bash ./turnip_builder.sh ${{ github.event.inputs.branch }}
       
     - id: version
-      name: Get version
+      name: Get date
       run: |
           echo "date=$(date -u "+%Y%m%d")" >> $GITHUB_OUTPUT
 
