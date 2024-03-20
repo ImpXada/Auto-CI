@@ -12,8 +12,7 @@ clear
 
 echo "Checking system for required Dependencies ..."
 for deps_chk in $deps;
-	do 
-		sleep 0.25
+	do
 		if command -v $deps_chk >/dev/null 2>&1 ; then
 			echo -e "$green - $deps_chk found $nocolor"
 		else
