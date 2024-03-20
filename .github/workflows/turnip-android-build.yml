@@ -2,6 +2,11 @@ name: turnip-android-build
 
 on:
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'select branch to build(default: master)'
+        required: false
+        default: 'main'
   schedule:
     - cron: '0 0 * * *'
 
@@ -10,8 +15,6 @@ jobs:
     permissions:
       contents: write
     runs-on: ubuntu-22.04
-    env:
-      BRANCH: main  # 添加一个名为 BRANCH 的环境变量，默认值为 main
     steps:
     - uses: actions/checkout@v3
       with: { ref: master }
@@ -26,7 +29,7 @@ jobs:
         sudo apt install meson
     
     - name: Execute build script
-      run: bash ./turnip_builder.sh $BRANCH
+      run: bash ./turnip_builder.sh ${{ github.event.inputs.branch }}
       
     - id: version
       name: Get version
