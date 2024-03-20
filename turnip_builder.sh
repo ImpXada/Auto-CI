@@ -44,9 +44,11 @@ echo "Exracting android-ndk to a folder ..." $'\n'
 unzip "$ndkver"-linux.zip  &> /dev/null
 
 
-git clone https://gitlab.freedesktop.org/mesa/mesa.git mesa-main
-cd mesa-main
+git clone https://gitlab.freedesktop.org/mesa/mesa.git
+cd mesa
 git checkout $1
+version=$(<VERSION)
+tag=$(git describe --tags)
 
 
 echo "Creating meson cross file ..." $'\n'
@@ -70,7 +72,7 @@ EOF
 
 
 echo "Generating build files ..." $'\n'
-meson build-android-aarch64 --cross-file $workdir/mesa-main/android-aarch64 -Dbuildtype=release -Dplatforms=android -Dplatform-sdk-version=31 -Dandroid-stub=true -Dgallium-drivers= -Dvulkan-drivers=freedreno -Dfreedreno-kmds=kgsl -Db_lto=true &> $workdir/meson_log
+meson build-android-aarch64 --cross-file $workdir/mesa/android-aarch64 -Dbuildtype=release -Dplatforms=android -Dplatform-sdk-version=31 -Dandroid-stub=true -Dgallium-drivers= -Dvulkan-drivers=freedreno -Dfreedreno-kmds=kgsl -Db_lto=true &> $workdir/meson_log
 
 
 
@@ -80,10 +82,10 @@ ninja -C build-android-aarch64 &> $workdir/ninja_log
 
 
 echo "Using patchelf to match soname ..."  $'\n'
-cp $workdir/mesa-main/build-android-aarch64/src/freedreno/vulkan/libvulkan_freedreno.so $workdir
-cp $workdir/mesa-main/build-android-aarch64/src/android_stub/libhardware.so $workdir
-cp $workdir/mesa-main/build-android-aarch64/src/android_stub/libsync.so $workdir
-cp $workdir/mesa-main/build-android-aarch64/src/android_stub/libbacktrace.so $workdir
+cp $workdir/mesa/build-android-aarch64/src/freedreno/vulkan/libvulkan_freedreno.so $workdir
+cp $workdir/mesa/build-android-aarch64/src/android_stub/libhardware.so $workdir
+cp $workdir/mesa/build-android-aarch64/src/android_stub/libsync.so $workdir
+cp $workdir/mesa/build-android-aarch64/src/android_stub/libbacktrace.so $workdir
 cd $workdir
 patchelf --set-soname vulkan.adreno.so libvulkan_freedreno.so
 mv libvulkan_freedreno.so vulkan.adreno.so
@@ -105,12 +107,12 @@ current_date=$(date "+%Y%m%d")
 cat <<EOF >"meta.json"
 {
   "schemaVersion": 1,
-  "name": "Mesa Turnip Adreno Driver Daily",
-  "description": "Open-source Vulkan driver build from mesa drivers repo",
+  "name": "Turnip driver v$version",
+  "description": "Compile from the $1 branch of the Mesa repository.",
   "author": "ImpXada",
-  "packageVersion": "T-Alpha",
+  "packageVersion": "Alpha",
   "vendor": "Mesa",
-  "driverVersion": "$current_date",
+  "driverVersion": "$current_date-$tag",
   "minApi": 31,
   "libraryName": "vulkan.adreno.so"
 }
