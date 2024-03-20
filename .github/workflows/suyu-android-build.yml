@@ -2,6 +2,11 @@ name: suyu-android-build
 
 on:
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'select branch to build(default: dev)'
+        required: false
+        default: 'dev'
   schedule:
     - cron: "0 0 * * *"
 
@@ -21,7 +26,7 @@ jobs:
         cd ${{ github.workspace }}
         git clone https://gitlab.com/suyu-emu/suyu.git --recursive
         cd suyu
-        git checkout dev
+        git checkout ${{ github.event.inputs.branch }}
 
     - id: version
       name: Get version
