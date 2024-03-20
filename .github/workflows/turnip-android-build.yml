@@ -41,6 +41,5 @@ jobs:
       with:
         name: ${{ steps.version.outputs.date }}
         tag_name: ${{ steps.version.outputs.date }}
-        body: Turnip Android module
         files: |
            turnip_workdir/turnip_${{ steps.version.outputs.date }}.zip

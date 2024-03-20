@@ -61,5 +61,4 @@ jobs:
       with:
         name: ${{ steps.version.outputs.date }}
         tag_name: ${{ steps.version.outputs.date }}
-        body: https://gitlab.com/suyu-emu/suyu/-/issues
         files: ${{ github.workspace }}/suyu_${{ steps.version.outputs.date }}.apk
