@@ -8,7 +8,7 @@ on:
         required: false
         default: 'dev'
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "30 0 * * *"
 
 jobs:
   suyu_android_build:
@@ -24,9 +24,7 @@ jobs:
     - name: Download suyu source code
       run: |
         cd ${{ github.workspace }}
-        git clone https://gitlab.com/suyu-emu/suyu.git --recursive
-        cd suyu
-        git checkout ${{ github.event.inputs.branch }}
+        git clone --branch ${{ github.event.inputs.branch }} https://github.com/suyu-emu/suyu.git --recursive
 
     - id: version
       name: Get version
@@ -35,6 +33,7 @@ jobs:
         cd ${{ github.workspace }}/suyu
         echo "hash=$(git log -1 --pretty=format:%H)" >> $GITHUB_OUTPUT
         echo "short_hash=$(git describe --always --long)" >> $GITHUB_OUTPUT
+        echo "version=$(git describe --tags --always)" >> $GITHUB_OUTPUT
 
     - name: Set up cache
       uses: actions/cache@v4
@@ -58,7 +57,7 @@ jobs:
         cd ${{ github.workspace }}/suyu/src/android
         chmod +x ./gradlew
         ./gradlew "assembleMainlineRelease"
-        mv app/build/outputs/apk/mainline/release/app-mainline-release.apk ${{ github.workspace }}/suyu_${{ steps.version.outputs.date }}.apk
+        mv app/build/outputs/apk/mainline/release/app-mainline-release.apk ${{ github.workspace }}/suyu-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
         ccache -s
 
     - name: Release ${{ steps.version.outputs.date }}
@@ -66,4 +65,4 @@ jobs:
       with:
         name: ${{ steps.version.outputs.date }}
         tag_name: ${{ steps.version.outputs.date }}
-        files: ${{ github.workspace }}/suyu_${{ steps.version.outputs.date }}.apk
+        files: ${{ github.workspace }}/suyu-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
