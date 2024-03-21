@@ -35,6 +35,7 @@ jobs:
       name: Get date
       run: |
           echo "date=$(date -u "+%Y%m%d")" >> $GITHUB_OUTPUT
+          echo "tag=$(echo $tag)" >> $GITHUB_OUTPUT
 
     - name: Release ${{ steps.version.outputs.date }}
       uses: softprops/action-gh-release@v2
@@ -42,4 +43,4 @@ jobs:
         name: ${{ steps.version.outputs.date }}
         tag_name: ${{ steps.version.outputs.date }}
         files: |
-           turnip_workdir/turnip-${{ steps.version.outputs.date }}-$tag.zip
+           turnip_workdir/turnip-${{ steps.version.outputs.date }}-${{ steps.version.outputs.tag }}.zip
