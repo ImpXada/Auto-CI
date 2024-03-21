@@ -43,11 +43,9 @@ echo "Exracting android-ndk to a folder ..." $'\n'
 unzip "$ndkver"-linux.zip  &> /dev/null
 
 
-git clone https://gitlab.freedesktop.org/mesa/mesa.git
-cd mesa
-git checkout $1
+git clone --branch $1 https://gitlab.freedesktop.org/mesa/mesa.git
 version=$(<VERSION)
-tag=$(git describe --tags)
+export tag=$(git describe --tags --always)
 
 
 echo "Creating meson cross file ..." $'\n'
@@ -126,8 +124,8 @@ cp $workdir/libbacktrace.so $driverdir
 
 
 echo "Packing files in to magisk module ..." $'\n'
-zip -r $workdir/turnip_$current_date.zip * &> /dev/null
-if ! [ -a $workdir/turnip_$current_date.zip ];
+zip -r $workdir/turnip-$current_date-$tag.zip * &> /dev/null
+if ! [ -a $workdir/turnip-$current_date-$tag.zip ];
 	then echo -e "$red-Packing failed!$nocolor" && exit 1
-	else echo -e "$green-All done, you can take your module from here;$nocolor" && echo $workdir/turnip_$current_date.zip
+	else echo -e "$green-All done, module name: $workdir/turnip-$current_date-$tag.zip;$nocolor"
 fi
