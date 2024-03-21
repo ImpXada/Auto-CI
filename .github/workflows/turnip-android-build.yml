@@ -34,7 +34,7 @@ jobs:
     - id: version
       name: Get date
       run: |
-          echo "date=$(date -u "+%Y%m%d")" >> $GITHUB_OUTPUT"
+          echo 'date=$(date -u "+%Y%m%d")' >> $GITHUB_OUTPUT
 
     - name: Release ${{ steps.version.outputs.date }}
       uses: softprops/action-gh-release@v2
