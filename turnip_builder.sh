@@ -44,6 +44,7 @@ unzip "$ndkver"-linux.zip  &> /dev/null
 
 
 git clone --branch $1 https://gitlab.freedesktop.org/mesa/mesa.git
+cd mesa
 version=$(<VERSION)
 export tag=$(git describe --tags --always)
 
