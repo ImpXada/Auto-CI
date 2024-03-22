@@ -1,4 +1,4 @@
-name: suyu-android-build
+name: sudachi-android-build
 
 on:
   workflow_dispatch:
