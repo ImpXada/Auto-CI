@@ -7,8 +7,8 @@ on:
         description: 'select branch to build(default: dev)'
         required: false
         default: 'dev'
-  schedule:
-    - cron: "30 0 * * *"
+  # schedule:
+    # - cron: "30 0 * * *"
 
 jobs:
   suyu_android_build:
