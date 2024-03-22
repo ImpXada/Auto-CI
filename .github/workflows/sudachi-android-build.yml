@@ -8,7 +8,7 @@ on:
         required: false
         default: 'main'
   schedule:
-    - cron: "30 0 * * *"
+    - cron: "30 0 */2 * *"
 
 jobs:
   sudachi_android_build:
