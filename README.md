@@ -19,7 +19,3 @@
 1. [Suyu](https://git.suyu.dev/suyu/suyu)
 2. [Turnip](https://gitlab.freedesktop.org/mesa/mesa)
 3. [Sudachi](https://github.com/sudachi-emu/sudachi)
-
-## 许可证
-
-这个项目遵循 [GPL-3.0] 许可证。详情请参阅 [LICENSE](LICENSE) 文件。
