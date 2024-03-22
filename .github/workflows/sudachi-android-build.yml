@@ -1,0 +1,68 @@
+name: sudachi-android-build
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'select branch to build(default: main)'
+        required: false
+        default: 'main'
+  schedule:
+    - cron: "30 0 * * *"
+
+jobs:
+  suyu_android_build:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: 17
+
+    - name: Download suyu source code
+      run: |
+        cd ${{ github.workspace }}
+        git clone --branch ${{ github.event.inputs.branch || 'main' }} https://github.com/sudachi-emu/sudachi.git --recursive
+
+    - id: version
+      name: Get version
+      run: |
+        echo "date=$(/bin/date -u "+%Y%m%d")" >> $GITHUB_OUTPUT
+        cd ${{ github.workspace }}/sudachi
+        echo "hash=$(git log -1 --pretty=format:%H)" >> $GITHUB_OUTPUT
+        echo "short_hash=$(git describe --always --long)" >> $GITHUB_OUTPUT
+        echo "version=$(git describe --tags --always)" >> $GITHUB_OUTPUT
+
+    - name: Set up cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+          ~/.ccache
+        key: ${{ runner.os }}-android-${{ steps.version.outputs.hash }}
+        restore-keys: |
+            ${{ runner.os }}-android-
+
+    - name: Prepare environment
+      run: |
+        sudo apt-get install ccache glslang-dev glslang-tools
+
+    - name: Build Android
+      run: |
+        export NDK_CCACHE="$(which ccache)"
+        ccache -s
+        cd ${{ github.workspace }}/sudachi/src/android
+        chmod +x ./gradlew
+        ./gradlew "assembleMainlineRelease"
+        mv app/build/outputs/apk/mainline/release/app-mainline-release.apk ${{ github.workspace }}/sudachi-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
+        ccache -s
+
+    - name: Release ${{ steps.version.outputs.date }}
+      uses: softprops/action-gh-release@v2
+      with:
+        name: ${{ steps.version.outputs.date }}
+        tag_name: ${{ steps.version.outputs.date }}
+        files: ${{ github.workspace }}/sudachi-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
