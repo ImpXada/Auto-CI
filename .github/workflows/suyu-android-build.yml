@@ -24,7 +24,7 @@ jobs:
     - name: Download suyu source code
       run: |
         cd ${{ github.workspace }}
-        git clone --branch ${{ github.event.inputs.branch }} https://github.com/suyu-emu/suyu.git --recursive
+        git clone --branch ${{ github.event.inputs.branch }} https://git.suyu.dev/suyu/suyu --recursive
 
     - id: version
       name: Get version
