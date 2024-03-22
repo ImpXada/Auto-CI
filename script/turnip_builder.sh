@@ -106,7 +106,7 @@ cat <<EOF >"meta.json"
 {
   "schemaVersion": 1,
   "name": "Turnip driver v$version",
-  "description": "Compile from the $1 branch of the Mesa repository.",
+  "description": "Compile from Mesa's $1 branch.",
   "author": "ImpXada",
   "packageVersion": "Alpha",
   "vendor": "Mesa",
