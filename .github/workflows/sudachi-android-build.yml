@@ -11,7 +11,7 @@ on:
     - cron: "30 0 * * *"
 
 jobs:
-  suyu_android_build:
+  sudachi_android_build:
     permissions:
       contents: write
     runs-on: ubuntu-latest
@@ -21,7 +21,7 @@ jobs:
         distribution: temurin
         java-version: 17
 
-    - name: Download suyu source code
+    - name: Download sudachi source code
       run: |
         cd ${{ github.workspace }}
         git clone --branch ${{ github.event.inputs.branch || 'main' }} https://github.com/sudachi-emu/sudachi.git --recursive
