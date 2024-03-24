@@ -38,10 +38,11 @@ jobs:
           echo "date=$(date -u "+%Y%m%d")" >> $GITHUB_OUTPUT
           echo "tag=$(git describe --tags --always)" >> $GITHUB_OUTPUT
 
-    - name: Release ${{ steps.version.outputs.date }}
+    - name: Release Turnip
       uses: softprops/action-gh-release@v2
       with:
         name: ${{ steps.version.outputs.date }}
         tag_name: ${{ steps.version.outputs.date }}
+        body: Latest turnip build for Android on ${{ steps.version.outputs.date }} with version ${{ steps.version.outputs.tag }}
         files: |
            ${{ github.workspace }}/turnip_workdir/turnip-${{ steps.version.outputs.date }}-${{ steps.version.outputs.tag }}.zip
