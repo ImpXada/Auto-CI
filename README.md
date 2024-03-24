@@ -1,7 +1,9 @@
 # Auto-CI
+
 <p align="center">
 <a href="./README.md">简体中文</a>|<a href="./README_EN.md">English</a>
 </p>
+
 ## 发布说明
 
 1. 每日的00:30:00会自动生成Suyu安卓版。
