@@ -61,7 +61,7 @@ jobs:
         cd ${{ github.workspace }}/sudachi/src/android
         chmod +x ./gradlew
         ./gradlew "assembleMainlineRelease"
-        mv app/build/outputs/apk/${{ github.event.inputs.flavor || 'ea' }}/release/app-${{ github.event.inputs.flavor || 'ea' }}-release.apk ${{ github.workspace }}/sudachi-${{ github.event.inputs.flavor || 'ea' }}-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
+        mv $(find app/build/outputs/apk -type f | grep -E "\.apk$") ${{ github.workspace }}/sudachi-${{ github.event.inputs.flavor || 'ea' }}-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
         ccache -s
 
     - name: Release Sudachi
