@@ -7,8 +7,8 @@ on:
         description: 'select branch to build(default: main)'
         required: false
         default: 'main'
-  schedule:
-    - cron: "30 0 */2 * *"
+  # schedule:
+  #   - cron: "30 0 */2 * *"
 
 jobs:
   sudachi_android_build:
@@ -58,7 +58,7 @@ jobs:
         chmod +x ./gradlew
         ./gradlew "assembleEaRelease"
         echo $(find app/build/outputs/apk -type f | grep -E "\.apk$")
-        mv app/build/outputs/apk/mainline/release/app-mainline-release.apk ${{ github.workspace }}/sudachi-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
+        mv app/build/outputs/apk/ea/release/app-ea-release.apk ${{ github.workspace }}/sudachi-ea-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
         ccache -s
 
     - name: Release Sudachi EA
@@ -67,4 +67,4 @@ jobs:
         name: ${{ steps.version.outputs.date }}
         tag_name: ${{ steps.version.outputs.date }}
         body: Latest Sudachi build for Android on ${{ steps.version.outputs.date }} with version ${{ steps.version.outputs.version }}
-        files: ${{ github.workspace }}/sudachi-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
+        files: ${{ github.workspace }}/sudachi-ea-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
