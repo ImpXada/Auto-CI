@@ -1,7 +1,7 @@
 # Auto-CI
 
 <p align="center">
-<a href="./README.md">简体中文</a>|<a href="./README_EN.md">English</a>
+<a href="./README.md">简体中文</a> | <a href="./README_EN.md">English</a>
 </p>
 
 ## 发布说明
@@ -21,6 +21,9 @@
 ## 下载
 
 访问 [Release地址](https://github.com/ImpXada/Auto-CI/releases)。
+[Mesa Turnip Release](https://github.com/ImpXada/Auto-CI/releases/tag/turnip)
+[Suyu Release](https://github.com/ImpXada/Auto-CI/releases/tag/suyu)
+[Sudachi Release](https://github.com/ImpXada/Auto-CI/releases/tag/sudachi)
 
 ## 项目源码
 
