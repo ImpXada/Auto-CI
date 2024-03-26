@@ -41,7 +41,7 @@ jobs:
     - name: Release Turnip
       uses: softprops/action-gh-release@v2
       with:
-        name: ${{ steps.version.outputs.date }}
+        name: Mesa Turnip Android
         tag_name: ${{ steps.version.outputs.date }}
         body: Latest turnip build for Android on ${{ steps.version.outputs.date }} with version ${{ steps.version.outputs.tag }}
         files: |
