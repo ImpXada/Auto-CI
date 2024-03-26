@@ -68,5 +68,6 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
         name: Sudachi
+        tag_name: sudachi
         body: Latest Sudachi build for Android on ${{ steps.version.outputs.date }} with version ${{ steps.version.outputs.version }}
         files: ${{ github.workspace }}/sudachi-${{ github.event.inputs.flavor || 'ea' }}-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
