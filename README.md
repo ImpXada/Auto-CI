@@ -20,10 +20,7 @@
 
 ## 下载
 
-访问 [Release地址](https://github.com/ImpXada/Auto-CI/releases)。
-[Mesa Turnip Release](https://github.com/ImpXada/Auto-CI/releases/tag/turnip)
-[Suyu Release](https://github.com/ImpXada/Auto-CI/releases/tag/suyu)
-[Sudachi Release](https://github.com/ImpXada/Auto-CI/releases/tag/sudachi)
+访问 [Release地址](https://github.com/ImpXada/Auto-CI/releases)
 
 ## 项目源码
 
