@@ -22,9 +22,6 @@ Download--Open the emulator--Settings in the lower right corner--GPU Driver Mana
 
 Visit:
 [Release Address](https://github.com/ImpXada/Auto-CI/releases).
-[Mesa Turnip Release](https://github.com/ImpXada/Auto-CI/releases/tag/turnip)
-[Suyu Release](https://github.com/ImpXada/Auto-CI/releases/tag/suyu)
-[Sudachi Release](https://github.com/ImpXada/Auto-CI/releases/tag/sudachi)
 
 ## Project Source Code
 
