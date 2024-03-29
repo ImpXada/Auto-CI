@@ -63,5 +63,5 @@ jobs:
       with:
         name: suyu-windows-test
         tag_name: suyu-windows-test
-        files: ${{ github.workspace }}\suyu\artifacts\
+        files: 
 

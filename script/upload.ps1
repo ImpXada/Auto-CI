@@ -55,7 +55,7 @@ git clone --depth 1 file://$CURRENT_DIR $MSVC_SOURCE
 7z a -r -txz $MSVC_SOURCE_TARXZ $MSVC_SOURCE_TAR
 
 # Following section is quick hack to package artifacts differently for GitHub Actions
-if ("$env:GITHUB_ACTIONS" -eq "true") {
+
     Write-Output "Hello GitHub Actions"
 
     # With vcpkg we now have a few more dll files
@@ -100,10 +100,6 @@ if ("$env:GITHUB_ACTIONS" -eq "true") {
     Write-Output "Just the exe: $INDIVIDUAL_EXE"
     Copy-Item .\artifacts\suyu.exe .\$INDIVIDUAL_EXE
 
-
-}
-else {
-
     # Build the final release artifacts
     Copy-Item $MSVC_SOURCE_TARXZ -Destination $RELEASE_DIST
     Copy-Item "$BUILD_DIR\*" -Destination $RELEASE_DIST -Recurse
@@ -119,4 +115,4 @@ else {
     Get-ChildItem . -Filter "*.zip" | Copy-Item -destination "artifacts"
     Get-ChildItem . -Filter "*.7z" | Copy-Item -destination "artifacts"
     Get-ChildItem . -Filter "*.tar.xz" | Copy-Item -destination "artifacts"
-}
+
