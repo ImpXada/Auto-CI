@@ -58,10 +58,17 @@ jobs:
         cd ${{ github.workspace }}/suyu
         ${{ github.workspace }}\script\upload.ps1 ${{ github.event.inputs.build-name }}
 
+    - name: Find Artifacts
+      run: |
+        cd ${{ github.workspace }}
+        $files = Get-ChildItem -Path "${{ github.workspace }}" -Filter "suyu-*"
+        $filesList = $files.FullName -join ","
+        echo "Files found: $filesList"
+
     - name: Release Suyu
       uses: softprops/action-gh-release@v2
       with:
         name: suyu-windows-test
         tag_name: suyu-windows-test
-        files: ${{ github.workspace }}\suyu\suyu-*
+        files: $filesList
 
