@@ -62,8 +62,8 @@ jobs:
         ccache -s
         cd ${{ github.workspace }}/strato
         chmod +x ./gradlew
-        ./gradlew --no-daemon --stacktrace --build-cache --parallel --configure-on-demand assembleMainlineRelease
-        mv $(find app/build/outputs/apk -type f | grep -E "\.apk$") ${{ github.workspace }}/strato-${{ github.event.inputs.flavor || 'ea' }}-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
+        ./gradlew --no-daemon --stacktrace --build-cache --parallel --configure-on-demand assemble${{ github.event.inputs.flavor || 'mainline' }}Release
+        mv $(find app/build/outputs/apk -type f | grep -E "\.apk$") ${{ github.workspace }}/strato-${{ github.event.inputs.flavor || 'mainline' }}-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
         ccache -s
 
     - name: Release Strato
@@ -71,4 +71,4 @@ jobs:
       with:
         name: ${{ steps.version.outputs.date }}
         tag_name: ${{ steps.version.outputs.date }}
-        files: ${{ github.workspace }}/strato-${{ github.event.inputs.flavor || 'ea' }}-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
+        files: ${{ github.workspace }}/strato-${{ github.event.inputs.flavor || 'mainline' }}-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
