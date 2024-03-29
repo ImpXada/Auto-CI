@@ -43,13 +43,13 @@ Get-ChildItem "$BUILD_DIR\" -Recurse -Filter "*.pdb" | Copy-Item -destination .\
 Remove-Item "$BUILD_DIR\*.pdb"
 
 # Create artifact directories
-mkdir $RELEASE_DIST #suyu/suyu-windows-msvc-$BUILD_NAME
-mkdir $MSVC_SOURCE #suyu/suyu-windows-msvc-source-20210101-abcdef
-mkdir "artifacts" #suyu/artifacts
-$workspace = $env:GITHUB_WORKSPACE #Auto-CI
+mkdir $RELEASE_DIST
+mkdir $MSVC_SOURCE
+mkdir "artifacts"
+$workspace = $env:GITHUB_WORKSPACE
 Write-Output "workspace\artifacts: $workspace\artifacts"
 
-$CURRENT_DIR = Convert-Path . #suyu
+$CURRENT_DIR = Convert-Path .
 Write-Output "CURRENT_DIR: $CURRENT_DIR"
 # Build a tar.xz for the source of the release
 git clone --depth 1 file://$CURRENT_DIR $MSVC_SOURCE
@@ -62,10 +62,10 @@ git clone --depth 1 file://$CURRENT_DIR $MSVC_SOURCE
 
     # With vcpkg we now have a few more dll files
     Get-ChildItem .\build\bin\*.dll
-    Copy-Item .\build\bin\*.dll .\artifacts\ #suyu/artifacts/*.dll
+    Copy-Item .\build\bin\*.dll .\artifacts\
 
     # Hopefully there is an exe in either .\build\bin or .\build\bin\Release
-    Copy-Item .\build\bin\suyu*.exe .\artifacts\ #suyu/artifacts/suyu.exe
+    Copy-Item .\build\bin\suyu*.exe .\artifacts\
     Copy-Item "$BUILD_DIR\*" -Destination "artifacts" -Recurse
     Remove-Item .\artifacts\tests.exe -ErrorAction ignore
 

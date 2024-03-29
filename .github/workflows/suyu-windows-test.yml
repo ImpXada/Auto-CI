@@ -61,10 +61,10 @@ jobs:
     - name: Find Artifacts
       run: |
         cd ${{ github.workspace }}
-        $files = Get-ChildItem -Path "${{ github.workspace }}" -Filter "*.zip" -Recurse -Depth 3
+        $files = Get-ChildItem -Path "${{ github.workspace }}" -Filter "*.zip" -Recurse -Depth 2
         $filesList = $files.FullName -join ","
         echo "Files found: $filesList"
-        ehco "1-PRINTING FILES:"
+        echo "1-PRINTING FILES:"
         echo ${{ github.workspace }}
         Get-ChildItem -Path "${{ github.workspace }}" -Recurse -Depth 2 | ForEach-Object {
             $_.FullName
@@ -83,5 +83,5 @@ jobs:
       with:
         name: suyu-windows-test
         tag_name: suyu-windows-test
-        files: $filesList
+        files: ${{ github.workspace }}\suyu\artifacts\suyu-*
 
