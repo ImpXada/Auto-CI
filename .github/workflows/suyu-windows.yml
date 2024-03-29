@@ -7,6 +7,10 @@ on:
         description: 'select branch to build(default: dev)'
         required: false
         default: 'dev'
+      build-name:
+        description: 'select build-name to build(default: mainline)'
+        required: false
+        default: 'mainline'
 #   schedule:
 #     - cron: "30 0 * * *"
 
@@ -47,31 +51,17 @@ jobs:
     - name: Build Solution
       run: |
         cd ${{ github.workspace }}/suyu
-        Get-ChildItem -Path . -Recurse -Filter *.sln | ForEach-Object {
-            Write-Output $_.FullName
-        }
         msbuild build/suyu.sln /m /p:Configuration=Release
-
-    - name: Run PowerShell script
-      shell: powershell
-      run: |
-        $buildFolder = ".\build"
-        mkdir Result
-        $destinationFolder = ".\Result"
-        Get-ChildItem -Path $buildFolder -Filter "suyu*.exe" | ForEach-Object {
-            $newFileName = "suyu-windows.exe"  # 这里替换成你想要的新文件名
-            Copy-Item -Path $_.FullName -Destination "$destinationFolder\$newFileName" -Force
-        }
 
     - name: Package Artifacts
       run: |
-        cd ${{ github.workspace }}
-        ${{ github.workspace }}\script\upload.ps1 ${{ github.run_number }}
+        cd ${{ github.workspace }}/suyu
+        ${{ github.workspace }}\script\upload.ps1 ${{ github.event.inputs.build-name }}
 
     - name: Release Suyu
       uses: softprops/action-gh-release@v2
       with:
         name: suyu-windows-test
         tag_name: suyu-windows-test
-        files: artifacts/*
+        files: ${{ github.workspace }}/suyu/artifacts/*
 
