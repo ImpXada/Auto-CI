@@ -21,7 +21,8 @@ jobs:
 
     - name: Install Vulkan SDK
       run: |
-        ${{ github.workspace }}/scripts/install-vulkan-sdk.ps1
+        cd ${{ github.workspace }}
+        ${{ github.workspace }}\scripts\install-vulkan-sdk.ps1
 
     - name: Download suyu source code
       run: |
