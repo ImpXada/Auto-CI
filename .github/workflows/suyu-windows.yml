@@ -31,7 +31,7 @@ jobs:
 
     - name: Configure CMake
       run: |
-        # Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
+        Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
         # glslangValidator --version
         mkdir build
         cd build
