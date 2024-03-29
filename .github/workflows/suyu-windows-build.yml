@@ -1,0 +1,109 @@
+name: suyu-windows-build
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'select branch to build(default: dev)'
+        required: false
+        default: 'dev'
+      build-name:
+        description: 'select build-name to build(default: mainline)'
+        required: false
+        default: 'mainline'
+  schedule:
+    - cron: "30 0 */5 * *"
+
+jobs:
+  suyu_windows_build:
+    permissions:
+      contents: write
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+      with: { ref: main }
+
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v2
+      with:
+        msbuild-architecture: x64
+
+    - id: test_var
+      name: Set Var
+      run: |
+        echo "space=$('${{ github.workspace }}' -replace '\\','/')" >>  $GITHUB_OUTPUT
+
+    - name: Install Vulkan SDK
+      run: |
+        cd ${{ github.workspace }}
+        ${{ github.workspace }}\script\install-vulkan-sdk.ps1
+
+    - name: Download suyu source code
+      run: |
+        cd ${{ github.workspace }}
+        git clone --branch ${{ github.event.inputs.branch || 'dev' }} https://git.suyu.dev/suyu/suyu.git --recursive
+
+    - id: version
+      name: Get date
+      run: |
+          cd ${{ github.workspace }}\suyu
+          echo "date=$(date -u "+%Y%m%d")" >> $GITHUB_OUTPUT
+          echo "tag=$(git describe --tags --always)" >> $GITHUB_OUTPUT
+
+    - name: Configure CMake
+      run: |
+        cd ${{ github.workspace }}/suyu
+        Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1 &&
+        glslangValidator --version &&
+        mkdir build &&
+        cd build &&
+        cmake -E env CXXFLAGS="/Gw" cmake -G "Visual Studio 17 2022" -A x64 -DCMAKE_POLICY_DEFAULT_CMP0069=NEW -DSUYU_ENABLE_LTO=ON -DSUYU_USE_BUNDLED_QT=1 -DSUYU_USE_BUNDLED_SDL2=1 -DSUYU_USE_QT_WEB_ENGINE=ON -DENABLE_COMPATIBILITY_LIST_DOWNLOAD=ON -DSUYU_ENABLE_COMPATIBILITY_REPORTING=ON -DSUYU_TESTS=OFF -DUSE_DISCORD_PRESENCE=ON -DENABLE_QT_TRANSLATION=ON -DDISPLAY_VERSION="1.0.0" -DCMAKE_BUILD_TYPE=Release -DSUYU_CRASH_DUMPS=ON .. &&
+        cd ..
+
+    - name: Build Solution
+      run: |
+        cd ${{ github.workspace }}/suyu
+        msbuild build/suyu.sln /m /p:Configuration=Release
+
+    - name: Package Artifacts
+      run: |
+        cd ${{ github.workspace }}\suyu
+        ${{ github.workspace }}\script\upload.ps1 ${{ github.event.inputs.build-name }} ${{ steps.version.outputs.date }} ${{ steps.version.outputs.tag }}
+        cd ${{ github.workspace }}
+
+    - name: Find Artifacts
+      run: |
+        cd ${{ github.workspace }}
+        $files = Get-ChildItem -Path "${{ github.workspace }}\suyu\artifacts" -Filter "suyu-windows-msvc-"
+        $filesList = $files.FullName -join ","
+        echo "Files found: $filesList"
+        echo "1-PRINTING FILES:"
+        echo ${{ github.workspace }}
+        Get-ChildItem -Path "${{ github.workspace }}" -Recurse -Depth 2 | ForEach-Object {
+            $_.FullName
+        }
+        echo "2-END OF PRINTING FILES:"
+        Get-ChildItem -Path "${{ github.workspace }}" -Directory -Recurse | Where-Object { $_.Name -eq "artifacts" } | ForEach-Object {
+            Write-Output "Folder found at: $($_.FullName)"
+            Get-ChildItem -Path $_.FullName -Recurse | ForEach-Object {
+            Write-Output $_.FullName
+            }
+        }
+        echo "3-END OF PRINTING FILES:"
+
+
+    - name: Release Suyu Windows (Suyu-Windows)
+      uses: softprops/action-gh-release@v2
+      with:
+        name: Suyu-Windows
+        tag_name: suyu-windows
+        files: |
+           suyu*.zip
+
+    - name: Release Suyu Windows ${{ steps.version.outputs.date }}
+      uses: softprops/action-gh-release@v2
+      with:
+        name: ${{ steps.version.outputs.date }}
+        tag_name: ${{ steps.version.outputs.date }}
+        files: |
+           suyu*.zip
