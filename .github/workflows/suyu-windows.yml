@@ -46,6 +46,10 @@ jobs:
 
     - name: Build Solution
       run: |
+        cd ${{ github.workspace }}/suyu
+        Get-ChildItem -Path . -Recurse -Filter *.sln | ForEach-Object {
+            Write-Output $_.FullName
+        }
         msbuild build/suyu.sln /m /p:Configuration=Release
 
     - name: Run PowerShell script
