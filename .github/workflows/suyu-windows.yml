@@ -31,16 +31,16 @@ jobs:
 
     - name: Configure CMake
       run: |
-        cd suyu
-        Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
-        # glslangValidator --version
-        mkdir build
-        cd build
-        cmake .. -G "Visual Studio 17 2022" -A x64 -DCMAKE_POLICY_DEFAULT_CMP0069=NEW -DSUYU_ENABLE_LTO=ON -DSUYU_USE_BUNDLED_QT=1 -DSUYU_USE_BUNDLED_SDL2=1 -DSUYU_USE_QT_WEB_ENGINE=ON -DENABLE_COMPATIBILITY_LIST_DOWNLOAD=ON -DSUYU_ENABLE_COMPATIBILITY_REPORTING=OFF -DSUYU_TESTS=OFF -DUSE_DISCORD_PRESENCE=ON -DENABLE_QT_TRANSLATION=ON -DDISPLAY_VERSION=0.0.1 -DCMAKE_BUILD_TYPE=Release -DSUYU_CRASH_DUMPS=ON
+        cd ${{ github.workspace }}/suyu
+        refreshenv &&
+        glslangValidator --version &&
+        mkdir build &&
+        cd build &&
+        cmake -E env CXXFLAGS="/Gw" cmake -G "Visual Studio 17 2022" -A x64 -DCMAKE_POLICY_DEFAULT_CMP0069=NEW -DSUYU_ENABLE_LTO=ON -DSUYU_USE_BUNDLED_QT=1 -DSUYU_USE_BUNDLED_SDL2=1 -DSUYU_USE_QT_WEB_ENGINE=ON -DENABLE_COMPATIBILITY_LIST_DOWNLOAD=ON -DSUYU_ENABLE_COMPATIBILITY_REPORTING=ON -DSUYU_TESTS=OFF -DUSE_DISCORD_PRESENCE=ON -DENABLE_QT_TRANSLATION=ON -DDISPLAY_VERSION=1.0.0 -DCMAKE_BUILD_TYPE=Release -DSUYU_CRASH_DUMPS=ON -S ..
 
     - name: Build Solution
       run: |
-        cmake --build . --config Release
+        msbuild build/suyu.sln /m /p:Configuration=Release
 
     - name: Run PowerShell script
       shell: powershell
@@ -52,6 +52,11 @@ jobs:
             $newFileName = "suyu-windows.exe"  # 这里替换成你想要的新文件名
             Copy-Item -Path $_.FullName -Destination "$destinationFolder\$newFileName" -Force
         }
+
+    - name: Package Artifacts
+      run: |
+        cd ${{ github.workspace }}
+        ${{ github.workspace }}\script\upload.ps1 ${{ github.run_number }}
 
     - name: Release Suyu
       uses: softprops/action-gh-release@v2
