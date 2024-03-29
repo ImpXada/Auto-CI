@@ -1,0 +1,61 @@
+name: suyu-windows-build
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'select branch to build(default: dev)'
+        required: false
+        default: 'dev'
+#   schedule:
+#     - cron: "30 0 * * *"
+
+jobs:
+  suyu_windows_build:
+    permissions:
+      contents: write
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+      with: { ref: main }
+
+    - name: Install Vulkan SDK
+      run: |
+        ${{ github.workspace }}/scripts/install-vulkan-sdk.ps1
+
+    - name: Download suyu source code
+      run: |
+        cd ${{ github.workspace }}
+        git clone --branch ${{ github.event.inputs.branch || 'dev' }} https://git.suyu.dev/suyu/suyu.git --recursive
+
+    - name: Configure CMake
+      run: |
+        refreshenv
+        glslangValidator --version
+        mkdir build
+        cd build
+        cmake -E env CXXFLAGS="/Gw" -G "Visual Studio 17 2022" -A x64 -DCMAKE_POLICY_DEFAULT_CMP0069=NEW -DSUYU_ENABLE_LTO=ON -DSUYU_USE_BUNDLED_QT=1 -DSUYU_USE_BUNDLED_SDL2=1 -DSUYU_USE_QT_WEB_ENGINE=ON -DENABLE_COMPATIBILITY_LIST_DOWNLOAD=ON -DSUYU_ENABLE_COMPATIBILITY_REPORTING=OFF -DSUYU_TESTS=OFF -DUSE_DISCORD_PRESENCE=ON -DENABLE_QT_TRANSLATION=ON -DDISPLAY_VERSION=0.0.1 -DCMAKE_BUILD_TYPE=Release -DSUYU_CRASH_DUMPS=ON ..
+        cd ..
+
+    - name: Build Solution
+      run: |
+        msbuild build/suyu.sln /p:Configuration=Release /m
+
+    - name: Run PowerShell script
+      shell: powershell
+      run: |
+        $buildFolder = ".\build"
+        mkdir Result
+        $destinationFolder = ".\Result"
+        Get-ChildItem -Path $buildFolder -Filter "suyu*.exe" | ForEach-Object {
+            $newFileName = "suyu-windows.exe"  # 这里替换成你想要的新文件名
+            Copy-Item -Path $_.FullName -Destination "$destinationFolder\$newFileName" -Force
+        }
+
+    - name: Release Suyu
+      uses: softprops/action-gh-release@v2
+      with:
+        name: suyu-windows-test
+        tag_name: suyu-windows-test
+        files: Result/suyu-windows.exe
+
