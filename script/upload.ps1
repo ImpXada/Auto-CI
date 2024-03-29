@@ -46,9 +46,11 @@ Remove-Item "$BUILD_DIR\*.pdb"
 mkdir $RELEASE_DIST
 mkdir $MSVC_SOURCE
 mkdir "artifacts"
+$workspace = $env:GITHUB_WORKSPACE
+Write-Output "workspace\artifacts: $workspace\artifacts"
 
 $CURRENT_DIR = Convert-Path .
-
+Write-Output "CURRENT_DIR: $CURRENT_DIR"
 # Build a tar.xz for the source of the release
 git clone --depth 1 file://$CURRENT_DIR $MSVC_SOURCE
 7z a -r -ttar $MSVC_SOURCE_TAR $MSVC_SOURCE

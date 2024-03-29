@@ -55,13 +55,13 @@ jobs:
 
     - name: Package Artifacts
       run: |
-        cd ${{ github.workspace }}
+        cd ${{ github.workspace }}\suyu
         ${{ github.workspace }}\script\upload.ps1 ${{ github.event.inputs.build-name }}
 
     - name: Find Artifacts
       run: |
         cd ${{ github.workspace }}
-        $files = Get-ChildItem -Path "${{ github.workspace }}" -Filter "suyu-"
+        $files = Get-ChildItem -Path "${{ github.workspace }}" -Filter "suyu-" -Recurse -Depth 3
         $filesList = $files.FullName -join ","
         echo "Files found: $filesList"
         ehco "1-PRINTING FILES:"
@@ -92,4 +92,11 @@ jobs:
         name: suyu-windows-test
         tag_name: suyu-windows-test
         files: ${{ github.workspace }}\artifacts
+    
+    - name: R2
+      uses: softprops/action-gh-release@v2
+      with:
+        name: suyu-windows-test
+        tag_name: suyu-windows-test
+        files: ${{ github.workspace }}\suyu\artifacts
 
