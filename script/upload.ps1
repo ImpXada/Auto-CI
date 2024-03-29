@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 param($BUILD_NAME)
-
+Set-Location $env:GITHUB_WORKSPACE\suyu
 $GITDATE = $(git show -s --date=short --format='%ad') -replace "-", ""
 $GITREV = $(git show -s --format='%h')
 
