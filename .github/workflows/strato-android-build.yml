@@ -11,8 +11,8 @@ on:
         description: 'select flavor to build(default: mainline)'
         required: false
         default: 'mainline'
-#   schedule:
-#     - cron: "30 0 */2 * *"
+  schedule:
+    - cron: "0 0 1 * *"
 
 jobs:
   strato_android_build:
@@ -28,7 +28,12 @@ jobs:
     - name: Download strato source code
       run: |
         cd ${{ github.workspace }}
-        git clone --branch ${{ github.event.inputs.branch || 'master' }} https://github.com/strato-emu/strato.git --recursive
+        git clone --branch ${{ github.event.inputs.branch || 'master' }} https://github.com/strato-emu/strato.git
+        cd strato
+        git config -f .gitmodules submodule.Sirit.url https://github.com/yuzu-mirror/sirit
+        git add .gitmodules
+        git commit -m "Update submodule URL"
+        git submodule update --init --recursive
 
     - id: version
       name: Get version
