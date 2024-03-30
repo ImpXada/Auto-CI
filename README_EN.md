@@ -20,8 +20,11 @@ Download--Open the emulator--Settings in the lower right corner--GPU Driver Mana
 
 ## Download
 
-Visit:
-[Release Address](https://github.com/ImpXada/Auto-CI/releases).
+[Every day Release](https://github.com/ImpXada/Auto-CI/releases)
+[Suyu Android](https://github.com/ImpXada/Auto-CI/releases/tag/suyu-android)
+[Suyu Windows](https://github.com/ImpXada/Auto-CI/releases/tag/suyu-windows)
+[Turnip Android](https://github.com/ImpXada/Auto-CI/releases/tag/mesa-turnip-android)
+[Sudachi Android](https://github.com/ImpXada/Auto-CI/releases/tag/sudachi-android)
 
 ## Project Source Code
 
