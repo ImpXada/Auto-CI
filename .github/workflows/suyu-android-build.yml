@@ -8,7 +8,7 @@ on:
         required: false
         default: 'dev'
   schedule:
-    - cron: "30 0 * * *"
+    - cron: "0 0 * * *"
 
 jobs:
   suyu_android_build:
