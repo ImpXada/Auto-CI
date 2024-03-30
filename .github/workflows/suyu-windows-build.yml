@@ -28,11 +28,6 @@ jobs:
       with:
         msbuild-architecture: x64
 
-    - id: test_var
-      name: Set Var
-      run: |
-        echo "space=$('${{ github.workspace }}' -replace '\\','/')" >>  $GITHUB_OUTPUT
-
     - name: Install Vulkan SDK
       run: |
         cd ${{ github.workspace }}
