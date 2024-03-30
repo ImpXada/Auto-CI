@@ -20,7 +20,11 @@
 
 ## 下载
 
-访问 [Release地址](https://github.com/ImpXada/Auto-CI/releases)
+[每日Release地址](https://github.com/ImpXada/Auto-CI/releases)
+[Suyu Android版](https://github.com/ImpXada/Auto-CI/releases/tag/suyu-android)
+[Suyu Windows版](https://github.com/ImpXada/Auto-CI/releases/tag/suyu-windows)
+[Turnip Android版](https://github.com/ImpXada/Auto-CI/releases/tag/mesa-turnip-android)
+[Sudachi Android版](https://github.com/ImpXada/Auto-CI/releases/tag/sudachi-android)
 
 ## 项目源码
 
