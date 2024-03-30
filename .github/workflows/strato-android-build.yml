@@ -11,8 +11,8 @@ on:
         description: 'select flavor to build(default: mainline)'
         required: false
         default: 'mainline'
-#   schedule:
-#     - cron: "30 0 */2 * *"
+  schedule:
+    - cron: "0 0 1 * *"
 
 jobs:
   strato_android_build:
@@ -28,7 +28,14 @@ jobs:
     - name: Download strato source code
       run: |
         cd ${{ github.workspace }}
-        git clone --branch ${{ github.event.inputs.branch || 'master' }} https://github.com/strato-emu/strato.git --recursive
+        git clone --branch ${{ github.event.inputs.branch || 'master' }} https://github.com/strato-emu/strato.git
+        cd strato
+        git config --global user.email "autoci@impxada.com"
+        git config --global user.name "impxada-autoci"
+        git config -f .gitmodules submodule.Sirit.url https://github.com/yuzu-mirror/sirit
+        git add .gitmodules
+        git commit -m "Update submodule URL"
+        git submodule update --init --recursive
 
     - id: version
       name: Get version
@@ -66,7 +73,14 @@ jobs:
         mv $(find app/build/outputs/apk -type f | grep -E "\.apk$") ${{ github.workspace }}/strato-${{ github.event.inputs.flavor || 'mainline' }}-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
         ccache -s
 
-    - name: Release Strato
+    - name: Release Strato Android (Strato-Android)
+      uses: softprops/action-gh-release@v2
+      with:
+        name: Strato Android ${{ steps.version.outputs.date }}
+        tag_name: strato-android
+        files: ${{ github.workspace }}/strato-${{ github.event.inputs.flavor || 'mainline' }}-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
+
+    - name: Release Strato Android ${{ steps.version.outputs.date }}
       uses: softprops/action-gh-release@v2
       with:
         name: ${{ steps.version.outputs.date }}

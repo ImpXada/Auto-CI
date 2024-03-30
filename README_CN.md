@@ -1,12 +1,12 @@
 # Auto-CI
 
 <p align="center">
-<a href="./README_EN.md">English</a> | <a href="./README.md">简体中文</a>
+<a href="./README.md">English</a> | <a href="./README_CN.md">简体中文</a>
 </p>
 
 ## 项目介绍
 
-suyu sudachi turnip mesa的自动CI项目
+suyu sudachi strato mesa-turnip的自动CI项目
 
 ## 发布说明
 
@@ -14,8 +14,9 @@ suyu sudachi turnip mesa的自动CI项目
 2. 每2天的00:00:00（UTC）会自动生成Suyu Windows版。
 3. 每天的00:00:00（UTC）会自动生成Mesa Turnip 安卓版。
 4. 每3天的00:00:00（UTC）会自动生成Sudachi安卓版。
-5. 命名方式为”项目名-日期-Tag-分支“。（Tag取决于开发者，如果出现版本号下降，不代表发包版本落后）
-6. 发布频率可能会根据项目代码提交频率进行调整。
+5. 每月1号的00:00:00（UTC）会自动生成Strato安卓版。
+6. 命名方式为”项目名-日期-Tag-分支“。（Tag取决于开发者，如果出现版本号下降，不代表发包版本落后）
+7. 发布频率可能会根据项目代码提交频率进行调整。
 
 ## 驱动使用说明
 
@@ -34,8 +35,11 @@ suyu sudachi turnip mesa的自动CI项目
 
 [Sudachi Android版](https://github.com/ImpXada/Auto-CI/releases/tag/sudachi-android)
 
+[Strato Android版](https://github.com/ImpXada/Auto-CI/releases/tag/strato-android)
+
 ## 项目源码
 
 1. [Suyu](https://git.suyu.dev/suyu/suyu)
 2. [Turnip](https://gitlab.freedesktop.org/mesa/mesa)
 3. [Sudachi](https://github.com/sudachi-emu/sudachi)
+4. [Strato](https://github.com/strato-emu/strato)
