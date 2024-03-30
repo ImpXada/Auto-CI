@@ -1,32 +1,40 @@
 # Auto-CI
 
 <p align="center">
-<a href="./README.md">简体中文</a> | <a href="./README_EN.md">English</a>
+<a href="./README_CN.md">简体中文</a> | <a href="./README.md">English</a>
 </p>
 
-## 发布说明
+## Project Introduction
 
-1. 每日的00:30:00会自动生成Suyu安卓版。
-2. 每12小时会生成Turnip安卓驱动。
-3. 每2日的00:30:00会自动生成Sudachi安卓版。
-4. 命名方式为”项目名-日期-Tag-分支“。（Tag取决于开发者，如果出现版本号下降，不代表发包版本落后）
-5. 所有时间均为UTC时间。
-6. 发布环境为GitHub Actions。
-7. 发布频率可能会根据项目代码提交频率进行调整。
+This is an automated CI project for suyu, sudachi, and mesa turnip.
 
-## 驱动使用说明
+## Release Notes
 
-下载--打开模拟器--右下角设置--GPU驱动管理器--安装--选择下载好的zip包
+1. Suyu Android version is automatically generated daily at 00:00:00 (UTC).
+2. Suyu Windows version is automatically generated every 2 days at 00:00:00 (UTC).
+3. Mesa Turnip Android version is automatically generated daily at 00:00:00 (UTC).
+4. Sudachi Android version is automatically generated every 3 days at 00:00:00 (UTC).
+5. Naming format: "Project Name - Date - Tag - Branch". (Tag depends on the developer, a decrease in version number does not indicate a backward release version)
+6. Release frequency may be adjusted based on project code commit frequency.
 
-## 下载
+## Driver Usage Instructions
 
-[每日Release地址](https://github.com/ImpXada/Auto-CI/releases)
-[Suyu Android版](https://github.com/ImpXada/Auto-CI/releases/tag/suyu-android)
-[Suyu Windows版](https://github.com/ImpXada/Auto-CI/releases/tag/suyu-windows)
-[Turnip Android版](https://github.com/ImpXada/Auto-CI/releases/tag/mesa-turnip-android)
-[Sudachi Android版](https://github.com/ImpXada/Auto-CI/releases/tag/sudachi-android)
+Download--Open the emulator--Settings in the lower right corner--GPU Driver Manager--Install--Select the downloaded zip package
 
-## 项目源码
+## Download
+
+[Every day Release](https://github.com/ImpXada/Auto-CI/releases)
+The daily release includes all projects that underwent CI execution on that day.
+
+[Suyu Android](https://github.com/ImpXada/Auto-CI/releases/tag/suyu-android)
+
+[Suyu Windows](https://github.com/ImpXada/Auto-CI/releases/tag/suyu-windows)
+
+[Turnip Android](https://github.com/ImpXada/Auto-CI/releases/tag/mesa-turnip-android)
+
+[Sudachi Android](https://github.com/ImpXada/Auto-CI/releases/tag/sudachi-android)
+
+## Project Source Code
 
 1. [Suyu](https://git.suyu.dev/suyu/suyu)
 2. [Turnip](https://gitlab.freedesktop.org/mesa/mesa)
