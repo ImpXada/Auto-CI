@@ -6,7 +6,7 @@
 
 ## Project Introduction
 
-This is an automated CI project for suyu, sudachi, and mesa turnip.
+This is an automated CI project for suyu, sudachi, strato and mesa turnip.
 
 ## Release Notes
 
@@ -14,8 +14,9 @@ This is an automated CI project for suyu, sudachi, and mesa turnip.
 2. Suyu Windows version is automatically generated every 2 days at 00:00:00 (UTC).
 3. Mesa Turnip Android version is automatically generated daily at 00:00:00 (UTC).
 4. Sudachi Android version is automatically generated every 3 days at 00:00:00 (UTC).
-5. Naming format: "Project Name - Date - Tag - Branch". (Tag depends on the developer, a decrease in version number does not indicate a backward release version)
-6. Release frequency may be adjusted based on project code commit frequency.
+5. Strato Android version is automatically generated on the 1st of every month at 00:00:00 (UTC).
+6. Naming format: "Project Name - Date - Tag - Branch". (Tag depends on the developer, a decrease in version number does not indicate a backward release version)
+7. Release frequency may be adjusted based on project code commit frequency.
 
 ## Driver Usage Instructions
 
@@ -34,8 +35,11 @@ The daily release includes all projects that underwent CI execution on that day.
 
 [Sudachi Android](https://github.com/ImpXada/Auto-CI/releases/tag/sudachi-android)
 
+[Strato Android](https://github.com/ImpXada/Auto-CI/releases/tag/strato-android)
+
 ## Project Source Code
 
 1. [Suyu](https://git.suyu.dev/suyu/suyu)
 2. [Turnip](https://gitlab.freedesktop.org/mesa/mesa)
 3. [Sudachi](https://github.com/sudachi-emu/sudachi)
+4. [Strato](https://github.com/strato-emu/strato)
