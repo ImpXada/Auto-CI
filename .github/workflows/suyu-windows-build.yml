@@ -72,7 +72,7 @@ jobs:
     - name: Release Suyu Windows (Suyu-Windows)
       uses: softprops/action-gh-release@v2
       with:
-        name: Suyu-Windows
+        name: Suyu Windows ${{ steps.version.outputs.date }}
         tag_name: suyu-windows
         files: |
            suyu*.zip

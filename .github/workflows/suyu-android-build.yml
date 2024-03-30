@@ -60,7 +60,14 @@ jobs:
         mv app/build/outputs/apk/mainline/release/app-mainline-release.apk ${{ github.workspace }}/suyu-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
         ccache -s
 
-    - name: Release Suyu
+    - name: Release Suyu Android (Suyu-Android)
+      uses: softprops/action-gh-release@v2
+      with:
+        name: Suyu Android ${{ steps.version.outputs.date }}
+        tag_name: suyu-android
+        files: ${{ github.workspace }}/suyu-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
+
+    - name: Release Suyu Android ${{ steps.version.outputs.date }}
       uses: softprops/action-gh-release@v2
       with:
         name: ${{ steps.version.outputs.date }}

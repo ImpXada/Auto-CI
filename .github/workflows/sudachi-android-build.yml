@@ -64,7 +64,14 @@ jobs:
         mv $(find app/build/outputs/apk -type f | grep -E "\.apk$") ${{ github.workspace }}/sudachi-${{ github.event.inputs.flavor || 'ea' }}-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
         ccache -s
 
-    - name: Release Sudachi
+    - name: Release Sudachi (Sudachi-Android)
+      uses: softprops/action-gh-release@v2
+      with:
+        name: Sudachi Android ${{ steps.version.outputs.date }}
+        tag_name: sudachi-android
+        files: ${{ github.workspace }}/sudachi-${{ github.event.inputs.flavor || 'ea' }}-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
+
+    - name: Release Sudachi ${{ steps.version.outputs.date }}
       uses: softprops/action-gh-release@v2
       with:
         name: ${{ steps.version.outputs.date }}
