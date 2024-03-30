@@ -30,6 +30,8 @@ jobs:
         cd ${{ github.workspace }}
         git clone --branch ${{ github.event.inputs.branch || 'master' }} https://github.com/strato-emu/strato.git
         cd strato
+        git config --global user.email "autoci@impxada.com"
+        git config --global user.name "impxada-autoci"
         git config -f .gitmodules submodule.Sirit.url https://github.com/yuzu-mirror/sirit
         git add .gitmodules
         git commit -m "Update submodule URL"
