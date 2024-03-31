@@ -7,11 +7,11 @@ on:
         description: 'select branch to build(default: dev)'
         required: false
         default: 'dev'
-  schedule:
-    - cron: "0 0 * * *"
+  # schedule:
+  #   - cron: "0 0 * * *"
 
 jobs:
-  suyu_android_build:
+  suyu_linux_build:
     permissions:
       contents: write
     runs-on: ubuntu-latest
@@ -50,6 +50,15 @@ jobs:
         sudo apt update
         sudo apt-get install ccache glslang-dev glslang-tools ninja-build libudev-dev nasm qt6-base-dev libglu1-mesa-dev
 
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v3
+      with:
+        version: '6.3.1'
+        host: 'linux'
+        dir: '${{ github.workspace }}/suyu/'
+        set-env: true
+        modules: 'qtnetworkauth qtwebengine'
+
     - name: Build Linux
       run: |
         cd ${{ github.workspace }}/suyu
@@ -74,9 +83,11 @@ jobs:
             -DSUYU_USE_BUNDLED_FFMPEG=ON \
             -DSUYU_ENABLE_LTO=OFF \
             -DSUYU_CRASH_DUMPS=ON \
+            -DENABLE_QT6=ON \
             -DSUYU_USE_FASTER_LD=ON \
             -DBoost_INCLUDE_DIR=${{steps.install-boost.outputs.BOOST_ROOT}}/include \
             -DBoost_LIBRARY_DIRS=${{steps.install-boost.outputs.BOOST_ROOT}}/lib \
+            -DQT6_LOCATION=${QT_ROOT_DIR} \
             -GNinja
         ninja
         ccache -sv

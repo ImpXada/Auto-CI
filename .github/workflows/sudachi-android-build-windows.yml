@@ -1,0 +1,78 @@
+name: sudachi-android-build-windows
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'select branch to build(default: main)'
+        required: false
+        default: 'main'
+      flavor:
+        description: 'select flavor to build(default: ea)'
+        required: false
+        default: 'ea'
+  schedule:
+    - cron: "0 0 */3 * *"
+
+jobs:
+  sudachi-android-build-windows:
+    permissions:
+      contents: write
+    runs-on: windows-latest
+    steps:
+    - uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: 17
+
+    - name: Download sudachi source code
+      run: |
+        cd ${{ github.workspace }}
+        git clone --branch ${{ github.event.inputs.branch || 'main' }} https://github.com/sudachi-emu/sudachi.git
+        cd sudachi
+        git submodule update --init --recursive --remote
+        # cd externals/sirit && git reset --hard
+
+    - name: Get date
+      id: version
+      shell: pwsh
+      run: |
+          cd ${{ github.workspace }}/sudachi
+          "date=$(date -u "+%Y%m%d")" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          "tag=$(git describe --tags --always)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+    # - name: Set up cache
+    #   uses: actions/cache@v4
+    #   with:
+    #     path: |
+    #       ~/.gradle/caches
+    #       ~/.gradle/wrapper
+    #       ~/.ccache
+    #     key: ${{ runner.os }}-android-${{ steps.version.outputs.hash }}
+    #     restore-keys: |
+    #         ${{ runner.os }}-android-
+
+    - name: Build Android
+      run: |
+        # export NDK_CCACHE="$(which ccache)"
+        # ccache -s
+        cd ${{ github.workspace }}/sudachi/src/android
+        # chmod +x ./gradlew
+        # ./gradlew "assembleMainlineRelease"
+        ./gradlew.bat build
+        # mv $(find app/build/outputs/apk -type f | grep -E "\.apk$") ${{ github.workspace }}/sudachi-${{ github.event.inputs.flavor || 'ea' }}-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
+        # ccache -s
+
+    # - name: Release Sudachi (Sudachi-Android)
+    #   uses: softprops/action-gh-release@v2
+    #   with:
+    #     name: Sudachi Android ${{ steps.version.outputs.date }}
+    #     tag_name: sudachi-android
+    #     files: ${{ github.workspace }}/sudachi-${{ github.event.inputs.flavor || 'ea' }}-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
+
+    # - name: Release Sudachi ${{ steps.version.outputs.date }}
+    #   uses: softprops/action-gh-release@v2
+    #   with:
+    #     name: ${{ steps.version.outputs.date }}
+    #     tag_name: ${{ steps.version.outputs.date }}
+    #     files: ${{ github.workspace }}/sudachi-${{ github.event.inputs.flavor || 'ea' }}-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk

@@ -63,8 +63,8 @@ jobs:
         ccache -s
         cd ${{ github.workspace }}/sudachi/src/android
         chmod +x ./gradlew
-        # ./gradlew "assembleMainlineRelease"
-        bash gradlew build
+        ./gradlew "assembleMainlineRelease"
+        # bash gradlew build
         mv $(find app/build/outputs/apk -type f | grep -E "\.apk$") ${{ github.workspace }}/sudachi-${{ github.event.inputs.flavor || 'ea' }}-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
         ccache -s
 
