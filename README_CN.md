@@ -12,11 +12,12 @@ suyu sudachi strato mesa-turnip的自动CI项目
 
 1. 每天的00:00:00（UTC）会自动生成Suyu安卓版。
 2. 每2天的00:00:00（UTC）会自动生成Suyu Windows版。
-3. 每天的00:00:00（UTC）会自动生成Mesa Turnip 安卓版。
-4. 每3天的00:00:00（UTC）会自动生成Sudachi安卓版。
-5. 每月1号的00:00:00（UTC）会自动生成Strato安卓版。
-6. 命名方式为”项目名-日期-Tag-分支“。（Tag取决于开发者，如果出现版本号下降，不代表发包版本落后）
-7. 发布频率可能会根据项目代码提交频率进行调整。
+3. 每2天的00:00:00（UTC）会自动生成Suyu Linux版。
+4. 每天的00:00:00（UTC）会自动生成Mesa Turnip 安卓版。
+5. 每3天的00:00:00（UTC）会自动生成Sudachi安卓版。
+6. 每月1号的00:00:00（UTC）会自动生成Strato安卓版。
+7. 命名方式为”项目名-日期-Tag-分支“。（Tag取决于开发者，如果出现版本号下降，不代表发包版本落后）
+8. 发布频率可能会根据项目代码提交频率进行调整。
 
 ## 驱动使用说明
 
@@ -30,6 +31,8 @@ suyu sudachi strato mesa-turnip的自动CI项目
 [Suyu Android版](https://github.com/ImpXada/Auto-CI/releases/tag/suyu-android)
 
 [Suyu Windows版](https://github.com/ImpXada/Auto-CI/releases/tag/suyu-windows)
+
+[Suyu Linux版](https://github.com/ImpXada/Auto-CI/releases/tag/suyu-linux)
 
 [Turnip Android版](https://github.com/ImpXada/Auto-CI/releases/tag/mesa-turnip-android)
 

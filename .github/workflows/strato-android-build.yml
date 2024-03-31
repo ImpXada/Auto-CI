@@ -46,16 +46,16 @@ jobs:
         echo "short_hash=$(git describe --always --long)" >> $GITHUB_OUTPUT
         echo "version=$(git describe --tags --always)" >> $GITHUB_OUTPUT
 
-    - name: Set up cache
-      uses: actions/cache@v4
-      with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-          ~/.ccache
-        key: ${{ runner.os }}-android-${{ steps.version.outputs.hash }}
-        restore-keys: |
-            ${{ runner.os }}-android-
+    # - name: Set up cache
+    #   uses: actions/cache@v4
+    #   with:
+    #     path: |
+    #       ~/.gradle/caches
+    #       ~/.gradle/wrapper
+    #       ~/.cache
+    #     key: ${{ runner.os }}-strato-android-${{ steps.version.outputs.hash }}
+    #     restore-keys: |
+    #         ${{ runner.os }}-strato-android-
 
     - name: Prepare environment
       run: |
@@ -66,12 +66,12 @@ jobs:
     - name: Build Android
       run: |
         export NDK_CCACHE="$(which ccache)"
-        ccache -s
+        ccache -sv
         cd ${{ github.workspace }}/strato
         chmod +x ./gradlew
         ./gradlew --no-daemon --stacktrace --build-cache --parallel --configure-on-demand assemble${{ github.event.inputs.flavor || 'mainline' }}Release
         mv $(find app/build/outputs/apk -type f | grep -E "\.apk$") ${{ github.workspace }}/strato-${{ github.event.inputs.flavor || 'mainline' }}-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
-        ccache -s
+        ccache -sv
 
     - name: Release Strato Android (Strato-Android)
       uses: softprops/action-gh-release@v2

@@ -32,8 +32,8 @@ pip install mako &> /dev/null
 
 
 
-echo "Creating and entering to work directory ..." $'\n'
-mkdir -p $workdir && cd $workdir
+echo "Entering to work directory ..." $'\n'
+cd $workdir
 
 
 
@@ -43,7 +43,6 @@ echo "Exracting android-ndk to a folder ..." $'\n'
 unzip "$ndkver"-linux.zip  &> /dev/null
 
 
-git clone --branch $1 https://gitlab.freedesktop.org/mesa/mesa.git
 cd mesa
 version=$(<VERSION)
 export tag=$(git describe --tags --always)

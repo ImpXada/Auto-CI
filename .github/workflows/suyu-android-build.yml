@@ -41,10 +41,10 @@ jobs:
         path: |
           ~/.gradle/caches
           ~/.gradle/wrapper
-          ~/.ccache
-        key: ${{ runner.os }}-android-${{ steps.version.outputs.hash }}
+          ~/.cache
+        key: ${{ runner.os }}-suyu-android-${{ steps.version.outputs.hash }}
         restore-keys: |
-            ${{ runner.os }}-android-
+            ${{ runner.os }}-suyu-android-
 
     - name: Prepare environment
       run: |
@@ -53,12 +53,12 @@ jobs:
     - name: Build Android
       run: |
         export NDK_CCACHE="$(which ccache)"
-        ccache -s
+        ccache -sv
         cd ${{ github.workspace }}/suyu/src/android
         chmod +x ./gradlew
         ./gradlew "assembleMainlineRelease"
         mv app/build/outputs/apk/mainline/release/app-mainline-release.apk ${{ github.workspace }}/suyu-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
-        ccache -s
+        ccache -sv
 
     - name: Release Suyu Android (Suyu-Android)
       uses: softprops/action-gh-release@v2

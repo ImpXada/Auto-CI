@@ -26,17 +26,40 @@ jobs:
         sudo apt build-dep mesa -y
         sudo sed -i 's/jammy/mantic/g' /etc/apt/sources.list
         sudo apt update
-        sudo apt install meson
-    
-    - name: Execute build script
-      run: bash ./script/turnip_builder.sh ${{ github.event.inputs.branch || 'main'}}
-      
+        sudo apt install meson ccache -y
+
+    - name: Download suyu source code
+      run: |
+        mkdir -p ${{ github.workspace }}/turnip_workdir
+        cd ${{ github.workspace }}/turnip_workdir
+        git clone --branch ${{ github.event.inputs.branch || 'main'}} https://gitlab.freedesktop.org/mesa/mesa.git
+
     - id: version
       name: Get date
       run: |
           cd ${{ github.workspace }}/turnip_workdir/mesa
           echo "date=$(date -u "+%Y%m%d")" >> $GITHUB_OUTPUT
+          echo "hash=$(git log -1 --pretty=format:%H)" >> $GITHUB_OUTPUT
           echo "tag=$(git describe --tags --always)" >> $GITHUB_OUTPUT
+
+    - name: Set up cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+          ~/.cache
+        key: ${{ runner.os }}-turnip-${{ steps.version.outputs.hash }}
+        restore-keys: |
+            ${{ runner.os }}-turnip-
+
+    - name: Execute build script
+      run: |
+        export NDK_CCACHE="$(which ccache)"
+        ccache -sv
+        cd ${{ github.workspace }}
+        bash ./script/turnip_builder.sh ${{ github.event.inputs.branch || 'main'}}
+        ccache -sv
 
     - name: Release Turnip (Mesa-Turnip-Android)
       uses: softprops/action-gh-release@v2

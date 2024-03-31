@@ -28,7 +28,10 @@ jobs:
     - name: Download sudachi source code
       run: |
         cd ${{ github.workspace }}
-        git clone --branch ${{ github.event.inputs.branch || 'main' }} https://github.com/sudachi-emu/sudachi.git --recursive
+        git clone --branch ${{ github.event.inputs.branch || 'main' }} https://github.com/sudachi-emu/sudachi.git
+        cd sudachi
+        git submodule update --init --recursive --remote
+        # cd externals/sirit && git reset --hard
 
     - id: version
       name: Get version
@@ -45,10 +48,10 @@ jobs:
         path: |
           ~/.gradle/caches
           ~/.gradle/wrapper
-          ~/.ccache
-        key: ${{ runner.os }}-android-${{ steps.version.outputs.hash }}
+          ~/.cache
+        key: ${{ runner.os }}-sudachi-android-${{ steps.version.outputs.hash }}
         restore-keys: |
-            ${{ runner.os }}-android-
+            ${{ runner.os }}-sudachi-android-
 
     - name: Prepare environment
       run: |
@@ -57,12 +60,13 @@ jobs:
     - name: Build Android
       run: |
         export NDK_CCACHE="$(which ccache)"
-        ccache -s
+        ccache -sv
         cd ${{ github.workspace }}/sudachi/src/android
         chmod +x ./gradlew
         ./gradlew "assembleMainlineRelease"
+        # bash gradlew build
         mv $(find app/build/outputs/apk -type f | grep -E "\.apk$") ${{ github.workspace }}/sudachi-${{ github.event.inputs.flavor || 'ea' }}-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
-        ccache -s
+        ccache -sv
 
     - name: Release Sudachi (Sudachi-Android)
       uses: softprops/action-gh-release@v2
