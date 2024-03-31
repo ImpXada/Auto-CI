@@ -28,7 +28,9 @@ jobs:
     - name: Download sudachi source code
       run: |
         cd ${{ github.workspace }}
-        git clone --branch ${{ github.event.inputs.branch || 'main' }} https://github.com/sudachi-emu/sudachi.git --recursive
+        git clone --branch ${{ github.event.inputs.branch || 'main' }} https://github.com/sudachi-emu/sudachi.git
+        cd sudachi
+        git submodule update --init --recursive --remote
 
     - id: version
       name: Get version
