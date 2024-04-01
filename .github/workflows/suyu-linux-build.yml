@@ -107,7 +107,7 @@ jobs:
         export VERSION=${{ steps.version.outputs.version }}
         export WORKSPACE=${{ github.workspace }}
         cd ${{ github.workspace }}/suyu/build
-        bash ./script/package_suyu_linux.sh
+        bash ${{ github.workspace }}/script/package_suyu_linux.sh
         
 
     - name: Release Suyu Linux (Suyu-Linux)
