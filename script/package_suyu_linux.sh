@@ -90,26 +90,26 @@ if [ "${RELEASE_NAME}" = "mainline" ] || [ "${RELEASE_NAME}" = "early-access" ];
     echo "X-AppImage-Integrate=false" >> AppDir/org.suyu_emu.suyu.desktop
 fi
 
-if [ "${RELEASE_NAME}" = "mainline" ]; then
-    # Generate update information if releasing to mainline
-    ./appimagetool-x86_64.AppImage -u "gh-releases-zsync|suyu-emu|suyu-${RELEASE_NAME}|latest|suyu-*.AppImage.zsync" AppDir "${APPIMAGE_NAME}"
-else
-    ./appimagetool-x86_64.AppImage AppDir "${APPIMAGE_NAME}"
-fi
+./appimagetool-x86_64.AppImage AppDir "${APPIMAGE_NAME}"
+echo "AppImage created: ${PWD}/${APPIMAGE_NAME}"
 cd ..
 
 # Copy the AppImage and update info to the artifacts directory and avoid compressing it
 cp "build/${APPIMAGE_NAME}" "${ARTIFACTS_DIR}/"
 if [ -f "build/${APPIMAGE_NAME}.zsync" ]; then
+    echo "Copying zsync file"
     cp "build/${APPIMAGE_NAME}.zsync" "${ARTIFACTS_DIR}/"
 fi
 
 # Copy the AppImage to the general release directory and remove git revision info
 if [ "${RELEASE_NAME}" = "mainline" ] || [ "${RELEASE_NAME}" = "early-access" ]; then
+    echo "Copying AppImage to release directory"
     cp "build/${APPIMAGE_NAME}" "${DIR_NAME}/suyu-${RELEASE_NAME}.AppImage"
 fi
+find . -type f -name "*.AppImage"
 
 # Copy debug symbols to artifacts
 cd build/bin
 tar $COMPRESSION_FLAGS "${ARTIFACTS_DIR}/${REV_NAME}-debug.tar.xz" *.debug
-cp "${DIR_NAME}/suyu-${RELEASE_NAME}.AppImage" "${WORKSPACE}/suyu.AppImage"
+
+grep -rl "${APPIMAGE_NAME}" ${WORKSPACE}/suyu | xargs -I '{}' cp {} ${WORKSPACE}
