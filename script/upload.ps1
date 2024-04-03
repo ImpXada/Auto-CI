@@ -4,14 +4,8 @@
 param($BUILD_NAME, $BUILD_DATE, $BUILD_TAG)
 Set-Location $env:GITHUB_WORKSPACE\suyu
 
-if ("$BUILD_NAME" -eq "mainline") {
-    $RELEASE_DIST = "suyu-windows-msvc"
-}
-else {
-    $RELEASE_DIST = "suyu-windows-msvc-$BUILD_NAME"
-}
-
-$MSVC_BUILD_ZIP = "suyu-windows-msvc-$BUILD_DATE-$BUILD_TAG.zip" -replace " ", ""
+$RELEASE_DIST = "suyu-windows-$BUILD_NAME"
+$MSVC_BUILD_ZIP = "suyu-windows-$BUILD_DATE-$BUILD_TAG.zip" -replace " ", ""
 $env:BUILD_ZIP = $MSVC_BUILD_ZIP
 
 if (Test-Path -Path ".\build\bin\Release") {
