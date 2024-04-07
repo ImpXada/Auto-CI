@@ -11,8 +11,8 @@ on:
         description: 'select flavor to build(default: ea)'
         required: false
         default: 'ea'
-  schedule:
-    - cron: "0 0 */3 * *"
+  # schedule:
+  #   - cron: "0 0 */3 * *"
 
 jobs:
   sudachi_android_build:
