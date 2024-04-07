@@ -56,6 +56,7 @@ jobs:
     - name: Prepare environment
       run: |
         sudo apt-get install ccache glslang-dev glslang-tools
+        sudo apt remove --purge spirv-tools
 
     - name: Build Android
       run: |
