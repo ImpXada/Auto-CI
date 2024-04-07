@@ -30,7 +30,7 @@ jobs:
         cd ${{ github.workspace }}
         git clone --branch ${{ github.event.inputs.branch || 'main' }} https://github.com/sudachi-emu/sudachi.git
         cd sudachi
-        git submodule update --init --recursive --remote
+        git submodule update --force --init --recursive --remote
         # cd externals/sirit && git reset --hard
 
     - id: version
