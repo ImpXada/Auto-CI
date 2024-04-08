@@ -14,7 +14,7 @@ This is an automated CI project for suyu, sudachi, strato and mesa turnip.
 2. Suyu Windows version is automatically generated every 2 days at 00:00:00 (UTC).
 3. Suyu Linux version is automatically generated every 2 days at 00:00:00 (UTC).
 4. Mesa Turnip Android version is automatically generated daily at 00:00:00 (UTC).
-5. ~~Sudachi Android version is automatically generated every 3 days at 00:00:00 (UTC).~~
+5. Sudachi Android version is automatically generated every 5 days at 00:00:00 (UTC).
 6. Strato Android version is automatically generated on the 1st of every month at 00:00:00 (UTC).
 7. Naming format: "Project Name - Date - Tag - Branch". (Tag depends on the developer, a decrease in version number does not indicate a backward release version)
 8. Release frequency may be adjusted based on project code commit frequency.
@@ -36,7 +36,7 @@ The daily release includes all projects that underwent CI execution on that day.
 
 [Turnip Android](https://github.com/ImpXada/Auto-CI/releases/tag/mesa-turnip-android)
 
-~~[Sudachi Android](https://github.com/ImpXada/Auto-CI/releases/tag/sudachi-android)~~
+[Sudachi Android](https://github.com/ImpXada/Auto-CI/releases/tag/sudachi-android)
 
 [Strato Android](https://github.com/ImpXada/Auto-CI/releases/tag/strato-android)
 

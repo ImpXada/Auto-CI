@@ -11,8 +11,8 @@ on:
         description: 'select flavor to build(default: ea)'
         required: false
         default: 'ea'
-  # schedule:
-  #   - cron: "0 0 */3 * *"
+  schedule:
+    - cron: "0 0 */5 * *"
 
 jobs:
   sudachi_android_build:
@@ -28,10 +28,9 @@ jobs:
     - name: Download sudachi source code
       run: |
         cd ${{ github.workspace }}
-        git clone --branch ${{ github.event.inputs.branch || 'main' }} https://github.com/sudachi-emu/sudachi.git
+        git clone --branch ${{ github.event.inputs.branch || 'main' }} https://github.com/sudachi-emu/sudachi.git --recursive
         cd sudachi
-        git submodule update --force --init --recursive --remote
-        # cd externals/sirit && git reset --hard
+        sed -i '120i\        -Wno-unused-function' src/CMakeLists.txt
 
     - id: version
       name: Get version
@@ -55,8 +54,7 @@ jobs:
 
     - name: Prepare environment
       run: |
-        sudo apt-get install ccache glslang-dev glslang-tools
-        sudo apt remove --purge spirv-tools
+        sudo apt-get install ccache autoconf cmake g++-11 gcc-11 git glslang-tools libasound2 libboost-context-dev libglu1-mesa-dev libhidapi-dev libpulse-dev libtool libudev-dev libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 libxcb-xkb1 libxext-dev libxkbcommon-x11-0 mesa-common-dev nasm ninja-build qtbase5-dev qtbase5-private-dev qtwebengine5-dev qtmultimedia5-dev libmbedtls-dev catch2 libfmt-dev liblz4-dev nlohmann-json3-dev libzstd-dev libssl-dev libavfilter-dev libavcodec-dev libswscale-dev
 
     - name: Build Android
       run: |
@@ -64,7 +62,7 @@ jobs:
         ccache -sv
         cd ${{ github.workspace }}/sudachi/src/android
         chmod +x ./gradlew
-        ./gradlew "assembleMainlineRelease"
+        ./gradlew "assemble${{ github.event.inputs.flavor || 'ea' }}Release"
         # bash gradlew build
         mv $(find app/build/outputs/apk -type f | grep -E "\.apk$") ${{ github.workspace }}/sudachi-android-${{ github.event.inputs.flavor || 'ea' }}-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
         ccache -sv
