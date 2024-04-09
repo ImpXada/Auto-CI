@@ -83,7 +83,7 @@ fi
 
 # Don't let AppImageLauncher ask to integrate EA
 if [ "${RELEASE_NAME}" = "mainline" ] || [ "${RELEASE_NAME}" = "early-access" ]; then
-    echo "X-AppImage-Integrate=false" >> AppDir/org.suyu_emu.suyu.desktop
+    echo "X-AppImage-Integrate=false" >> AppDir/dev.suyu_emu.suyu.desktop
 fi
 
 ./appimagetool-x86_64.AppImage AppDir "${APPIMAGE_NAME}"
