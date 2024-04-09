@@ -30,7 +30,6 @@ jobs:
         cd ${{ github.workspace }}
         git clone --branch ${{ github.event.inputs.branch || 'main' }} https://github.com/sudachi-emu/sudachi.git --recursive
         cd sudachi
-        sed -i '120i\        -Wno-unused-function' src/CMakeLists.txt
 
     - id: version
       name: Get version
