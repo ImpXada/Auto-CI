@@ -63,7 +63,7 @@ jobs:
         chmod +x ./gradlew
         ./gradlew "assemble${{ github.event.inputs.flavor || 'ea' }}Release"
         # bash gradlew build
-        mv $(find app/build/outputs/apk -type f | grep -E "\.apk$") ${{ github.workspace }}/sudachi-android-${{ github.event.inputs.flavor || 'ea' }}-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
+        mv $(find sudachi/build/outputs/apk -type f | grep -E "\.apk$") ${{ github.workspace }}/sudachi-android-${{ github.event.inputs.flavor || 'ea' }}-${{ steps.version.outputs.date }}-${{ steps.version.outputs.version }}.apk
         ccache -sv
 
     - name: Release Sudachi (Sudachi-Android)
