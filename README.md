@@ -10,11 +10,11 @@ This is an automated CI project for suyu, sudachi, strato and mesa turnip.
 
 ## Release Notes
 
-1. Suyu Android version is automatically generated daily at 00:00:00 (UTC).
-2. Suyu Windows version is automatically generated every 2 days at 00:00:00 (UTC).
-3. Suyu Linux version is automatically generated every 2 days at 00:00:00 (UTC).
+1. Suyu Android version is automatically generated every 7 days at 00:00:00 (UTC).
+2. Suyu Windows version is automatically generated every 7 days at 00:00:00 (UTC).
+3. Suyu Linux version is automatically generated every 7 days at 00:00:00 (UTC).
 4. Mesa Turnip Android version is automatically generated daily at 00:00:00 (UTC).
-5. Sudachi Android version is automatically generated every 5 days at 00:00:00 (UTC).
+5. Sudachi Android version is automatically generated every 7 days at 00:00:00 (UTC).
 6. Strato Android version is automatically generated on the 1st of every month at 00:00:00 (UTC).
 7. Naming format: "Project Name - Date - Tag - Branch". (Tag depends on the developer, a decrease in version number does not indicate a backward release version)
 8. Release frequency may be adjusted based on project code commit frequency.
