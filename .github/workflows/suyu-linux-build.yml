@@ -11,8 +11,8 @@ on:
         description: 'select release_type to build(default: mainline)'
         required: false
         default: 'mainline'
-  schedule:
-    - cron: "0 0 */7 * *"
+  # schedule:
+  #   - cron: "0 0 */7 * *"
 
 jobs:
   suyu_linux_build:

@@ -11,8 +11,8 @@ on:
         description: 'select flavor to build(default: mainline)'
         required: false
         default: 'mainline'
-  schedule:
-    - cron: "0 0 1 * *"
+  # schedule:
+  #   - cron: "0 0 1 * *"
 
 jobs:
   strato_android_build:
